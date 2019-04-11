@@ -1,0 +1,1 @@
+bin\catalina.bat jpda start
