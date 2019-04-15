@@ -1,5 +1,8 @@
 package controller.command;
 
+import model.dao.AccountDao;
+import model.dao.DaoFactory;
+import model.entity.Account;
 import model.entity.Request;
 import model.service.RequestService;
 
@@ -23,11 +26,16 @@ public class ActionUser implements Command {
         if (content == null) {
             return "/WEB-INF/user/action.jsp";
         }
-        requestService.create(req);
+        requestService.create(req, getCurrentAccount(request));
 
         return "/WEB-INF/user/action.jsp";
 
 
+    }
+
+    private Account getCurrentAccount(HttpServletRequest request) {
+        String email = (String) request.getSession().getAttribute("email");
+        return DaoFactory.getInstance().createAccountDao().findByEmail(email).get();
     }
 }
 

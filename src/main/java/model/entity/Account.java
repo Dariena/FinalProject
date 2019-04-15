@@ -2,6 +2,8 @@ package model.entity;
 
 import model.entity.enums.Role;
 
+import java.util.List;
+
 
 public class Account {
     private int id;
@@ -13,6 +15,7 @@ public class Account {
     private String email;
     private String password;
     private String phone;
+    private List<Request> requests;
 
 
     public int getId() {
