@@ -21,7 +21,7 @@ public class CommandUtility {
         session.setAttribute("role", null);
     }
 
-    static boolean cannotLogUser(HttpServletRequest request, String email, Role role){
+    public static boolean cannotLogUser(HttpServletRequest request, String email, Role role){
         HashSet<String> loggedUsers = (HashSet<String>) request.getSession().getServletContext()
                 .getAttribute("loggedUsers");
 
@@ -32,11 +32,13 @@ public class CommandUtility {
         loggedUsers.add(email);
         request.getSession().getServletContext().setAttribute("loggedUsers", loggedUsers);
 
-        HttpSession session = request.getSession();
+    //    HttpSession session = request.getSession();
 
-        session.setAttribute("email", email);
-        session.setAttribute("role", role);
+    //    session.setAttribute("email", email);
+    //    session.setAttribute("role", role);
 
         return false;
     }
+
+
 }

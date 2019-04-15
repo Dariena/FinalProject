@@ -39,9 +39,9 @@ import java.util.Optional;
                 if(CommandUtility.cannotLogUser(request, account.get().getEmail(), account.get().getRole())){
                     return "/WEB-INF/error.jsp";
                 }
-                setSession(request.getSession());
+                //setSession(request.getSession());
                 request.getSession().setAttribute("role",account.get().getRole().name());
-
+                request.getSession().setAttribute("email", account.get().getEmail());
                 return pages.getOrDefault(account.get().getRole().name(), pages.get("login"));
             }
 

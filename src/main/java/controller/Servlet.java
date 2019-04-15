@@ -1,6 +1,7 @@
 package controller;
 
 import controller.command.*;
+import model.entity.enums.Role;
 import model.service.UserService;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -45,17 +46,17 @@ public class Servlet extends HttpServlet {
 
         String path = req.getRequestURI();
         path = path.replaceAll(".*/app/", "");
-        Command command = commands.getOrDefault(path, (r) -> "/login.jsp");
+        Command command = commands.get(path);
 
-        System.out.println(path);
 
         String page = command.execute(req);
         if (page.contains("redirect")) {
             resp.sendRedirect(page.replace("redirect:", ""));
-            // System.out.println(page.replace("redirect:", ""));
-        } else {
-            req.getRequestDispatcher(page).forward(req, resp);
-        }
-    }
 
+        } else {
+                req.getRequestDispatcher(page).forward(req, resp);
+        }
+
+    }
 }
+
