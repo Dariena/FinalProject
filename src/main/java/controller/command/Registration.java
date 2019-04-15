@@ -41,8 +41,11 @@ public class Registration extends AbstractController implements Command {
         account.setPassword(password);
         account.setEmail(email);
         account.setPhone(phone);
-
-        userService.create(account);
+        if (!userService.exists(account)) {
+            userService.create(account);
+        } else {
+            return "/registration.jsp";
+        }
         setSession(request.getSession());
         request.getSession().setAttribute("role",account.getRole());
 

@@ -1,7 +1,6 @@
 package controller;
 
 import controller.command.*;
-import model.entity.enums.Role;
 import model.service.UserService;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -26,6 +25,9 @@ public class Servlet extends HttpServlet {
         commands.put("user", new User());
         commands.put("logout", new Logout());
         commands.put("home", new Home());
+        commands.put("action", new ActionUser());
+        commands.put("actionManager", new ActionManager());
+        commands.put("actionMaster", new ActionMaster());
     }
 
     @Override

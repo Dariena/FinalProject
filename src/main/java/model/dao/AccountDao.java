@@ -7,5 +7,4 @@ public interface AccountDao extends GenericDao<Account> {
 
     Optional<Account> findByEmail(String email);
     Account create(Account entity);
-    //Optional<Account> createNewAccount(Account account);
 }

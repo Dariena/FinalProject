@@ -1,11 +1,12 @@
 package model.dao;
 
+import model.entity.Request;
 import model.entity.Review;
 
 import java.util.List;
 
-public interface RequestDao extends GenericDao<Review> {
+public interface RequestDao extends GenericDao<Request> {
 
-    //List<Review> getUpcomingEvents();
+    Request create(Request request);
 
 }

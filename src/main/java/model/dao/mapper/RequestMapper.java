@@ -2,6 +2,7 @@ package model.dao.mapper;
 
 import model.entity.Request;
 
+import java.sql.Date;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDateTime;
@@ -13,11 +14,13 @@ public class RequestMapper implements ObjectMapper<Request> {
     public Request extractFromResultSet(ResultSet rs) throws SQLException {
         Request request = new Request();
         request.setId(rs.getInt("idrequest"));
+        request.setContent(rs.getString("content"));
         request.setAccepted(rs.getBoolean("accepted"));
         request.setComment(rs.getString("comment"));
         LocalDateTime localDateTime = rs.getTimestamp("date").toLocalDateTime();
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm dd-MM-yyyy");
-        request.setDate(localDateTime.format(formatter));
+        // TODO: correct behavior
+        request.setDate(new Date(System.currentTimeMillis()));
 
         return request;
     }

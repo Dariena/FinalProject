@@ -31,6 +31,14 @@ public class UserService {
         return result;
     }
 
+    public boolean exists(Account account) {
+        boolean result;
+        try (AccountDao accountDao = daoFactory.createAccountDao()) {
+            result = accountDao.findByEmail(account.getEmail()).isPresent();
+        }
+        return result;
+    }
+
 
 
     public boolean validateData(Account account){

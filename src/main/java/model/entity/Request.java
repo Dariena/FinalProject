@@ -1,10 +1,12 @@
 package model.entity;
 
+import java.sql.Date;
+
 public class Request {
 
     private int id;
     private String content;
-    private String date;
+    private Date date;
     private boolean accepted;
     private String comment;
 
@@ -24,11 +26,11 @@ public class Request {
         this.content = content;
     }
 
-    public String getDate() {
+    public Date getDate() {
         return date;
     }
 
-    public void setDate(String date) {
+    public void setDate(Date date) {
         this.date = date;
     }
 
