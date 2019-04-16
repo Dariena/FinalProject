@@ -1,5 +1,7 @@
 package model.entity;
 
+import model.entity.enums.State;
+
 import java.sql.Date;
 
 public class Request {
@@ -7,7 +9,7 @@ public class Request {
     private int id;
     private String content;
     private Date date;
-    private boolean accepted;
+    private State accepted;
     private String comment;
 
     public int getId() {
@@ -34,11 +36,11 @@ public class Request {
         this.date = date;
     }
 
-    public boolean isAccepted() {
+    public State getAccepted() {
         return accepted;
     }
 
-    public void setAccepted(boolean accepted) {
+    public void setAccepted(State accepted) {
         this.accepted = accepted;
     }
 

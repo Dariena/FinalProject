@@ -4,7 +4,6 @@ import model.entity.Account;
 import model.entity.enums.Role;
 import model.service.UserService;
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
 import java.util.Optional;
 
 public class Registration extends AbstractController implements Command {
@@ -48,6 +47,7 @@ public class Registration extends AbstractController implements Command {
         }
         setSession(request.getSession());
         request.getSession().setAttribute("role",account.getRole());
+        request.getSession().setAttribute("email",account.getEmail());
 
         if (! userService.validateData(account)) {
             return "/registration.jsp";

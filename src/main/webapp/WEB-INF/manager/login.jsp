@@ -59,7 +59,7 @@
                     <li class="dropdown">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown">My office <b class="caret"></b></a>
                         <ul class="dropdown-menu">
-                            <li><a href=${pageContext.request.contextPath}/app/action>Action</a></li>
+                            <li><a href=${pageContext.request.contextPath}/app/actionManager>Action</a></li>
                             <li class="divider"></li>
                             <li> <a class="nav-link" href="${pageContext.request.contextPath}/app/logout">Logout</a></li>
                         </ul>

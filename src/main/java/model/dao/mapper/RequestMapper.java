@@ -1,6 +1,8 @@
 package model.dao.mapper;
 
 import model.entity.Request;
+import model.entity.enums.Role;
+import model.entity.enums.State;
 
 import java.sql.Date;
 import java.sql.ResultSet;
@@ -15,7 +17,7 @@ public class RequestMapper implements ObjectMapper<Request> {
         Request request = new Request();
         request.setId(rs.getInt("idrequest"));
         request.setContent(rs.getString("content"));
-        request.setAccepted(rs.getBoolean("accepted"));
+        request.setAccepted(State.valueOf(rs.getString("accepted")));
         request.setComment(rs.getString("comment"));
         LocalDateTime localDateTime = rs.getTimestamp("date").toLocalDateTime();
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm dd-MM-yyyy");
