@@ -11,13 +11,14 @@
 
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css">
+    <title>Review</title>
 
 
 </head>
 <body>
 
 <nav class="navbar navbar-expand-lg sticky-top navbar-default">
-    <a class="navbar-brand my-3">Registration Form</a>
+    <a class="navbar-brand my-3">Your Repairs</a>
 
     <div class="collapse navbar-collapse ml-4">
         <ul class="navbar-nav">

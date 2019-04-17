@@ -9,45 +9,21 @@
 
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css">
-    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/styles.css"/>
 
 </head>
 <body class="d-flex flex-column h-100">
 
 
-<jsp:include page="WEB-INF/views/header.jsp"/>
+<jsp:include page="WEB-INF/views/header_nlogout.jsp"/>
 
-
-<br><br>
-
-<div class="container-fluid">
-
-    <h2>All Users</h2>
-
-    <table class="table my-3">
-
-        <thead>
-        <tr>
-            <th scope="col">FirstName</th>
-            <th scope="col">LastName</th>
-            <th scope="col">Login</th>
-            <th scope="col">Email</th>
-        </tr>
-        </thead>
-
-        <tbody>
-
-        <c:forEach var="event" items="${events}">
-            <tr>
-                <td>${event.id}</td>
-                <td>${event.name}</td>
-                <td>${event.dateTime}</td>
-                <td>${event.location}</td>
-            </tr>
-        </c:forEach>
-
-        </tbody>
-    </table>
+<div>
+    <c:forEach var="review" items="${sessionScope.review}">
+        <ul>
+            <li>Content: <c:out value="${review.content}"/></li>
+            <li>Date: <c:out value="${review.date}"/></li>
+            <li>User`s email: <c:out value="${review.email}"/></li>
+        </ul>
+    </c:forEach>
 </div>
 
 

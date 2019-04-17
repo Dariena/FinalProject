@@ -2,6 +2,7 @@ package model.dao.mapper;
 
 import model.entity.Review;
 
+import java.sql.Date;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDateTime;
@@ -12,11 +13,12 @@ public class ReviewMapper implements ObjectMapper<Review>  {
     @Override
     public Review extractFromResultSet(ResultSet rs) throws SQLException {
         Review review = new Review();
-        review.setId(rs.getInt("id"));
-        review.setContent(rs.getString("context"));
-        LocalDateTime localDateTime = rs.getTimestamp("time").toLocalDateTime();
+        review.setId(rs.getInt("idreview"));
+        review.setContent(rs.getString("content"));
+        LocalDateTime localDateTime = rs.getTimestamp("date").toLocalDateTime();
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm dd-MM-yyyy");
-        review.setDate(localDateTime.format(formatter));
+        review.setDate(new Date(System.currentTimeMillis()));
+        review.setEmail(rs.getString("account_email"));
 
         return review;
     }

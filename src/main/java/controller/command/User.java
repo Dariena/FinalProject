@@ -1,5 +1,7 @@
 package controller.command;
 
+import controller.AbstractController;
+
 import javax.servlet.http.HttpServletRequest;
 
 public class User extends AbstractController implements Command {

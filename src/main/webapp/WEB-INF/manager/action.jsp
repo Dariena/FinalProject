@@ -13,13 +13,13 @@
 
 </head>
 <body>
-<p>Action manager</p>
-<jsp:include page="../views/header.jsp"/>
+<p>Request for manager</p>
+<jsp:include page="../views/header_nlogout.jsp"/>
 
 <div>
 
     <c:forEach var="request" items="${requestScope.request}">
-        <c:if test="${request.accepted=='UNREAD'}">
+        <%--<c:if test="${request.accepted=='UNREAD'}">--%>
         <ul>
             <li>Content: <c:out value="${request.content}"/></li>
             <li>Date: <c:out value="${request.date}"/></li>
@@ -37,7 +37,7 @@
 
 
         </ul>
-        </c:if>
+       <%-- </c:if>--%>
     </c:forEach>
 </div>
 </body>

@@ -20,12 +20,55 @@
     <link type="text/css" href="${pageContext.request.contextPath}/static/css/bootstrap.css" rel="stylesheet">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/2.3.1/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css">
-
+    <link rel="" href="${pageContext.request.contextPath}/static/img/tool-1957451_1280.jpg">
     <style type="text/css">
-        body {
-            padding-top: 60px;
-            padding-bottom: 40px;
+
+        /* Carousel base class */
+        .carousel {
+            margin-bottom: 60px;
         }
+
+        .carousel .container {
+            position: absolute;
+            right: 0;
+            bottom: 0;
+            left: 0;
+        }
+
+        .carousel-control {
+            background-color: transparent;
+            border: 0;
+            font-size: 120px;
+            margin-top: 0;
+            text-shadow: 0 1px 1px rgba(0,0,0,.4);
+        }
+
+        .carousel .item {
+            height: 500px;
+        }
+        .carousel img {
+            min-width: 100%;
+            height: 130%;
+        }
+
+        .carousel-caption {
+            background-color: transparent;
+            position: static;
+            max-width: 550px;
+            padding: 0 20px;
+            margin-bottom: 30px;
+        }
+        .carousel-caption h1,
+        .carousel-caption .lead {
+            margin: 0;
+            line-height: 1.25;
+            color: #000;
+            text-shadow: 0 1px 1px rgba(0,0,0,.4);
+        }
+        .carousel-caption .btn {
+            margin-top: 10px;
+        }
+
     </style>
     <link type="text/css" href="${pageContext.request.contextPath}/static/css/bootstrap-responsive.css" rel="stylesheet">
 
@@ -54,12 +97,12 @@
             <div class="nav-collapse collapse">
                 <ul class="nav">
                     <li class="active"><a href="#">Home</a></li>
-                    <li><a href="#">Reviews</a></li>
+                    <li><a href="${pageContext.request.contextPath}/app/reviewUser">Reviews</a></li>
                     <li><a href="#">Contact</a></li>
                     <li class="dropdown">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown">My office <b class="caret"></b></a>
                         <ul class="dropdown-menu">
-                            <li><a href=${pageContext.request.contextPath}/app/action>Action</a></li>
+                            <li><a href="${pageContext.request.contextPath}/app/action">Action</a></li>
                             <li class="divider"></li>
                             <li> <a class="nav-link" href="${pageContext.request.contextPath}/app/logout">Logout</a></li>
                         </ul>
@@ -73,12 +116,42 @@
 
 <div class="container">
 
-    <!-- Main hero unit for a primary marketing message or call to action -->
-    <div class="hero-unit">
-        <h1>Hello, world!</h1>
-        <p>This is a template for a simple marketing or informational website. It includes a large callout called the hero unit and three supporting pieces of content. Use it as a starting point to create something more unique.</p>
-        <p><a href="#" class="btn btn-primary btn-large">Learn more &raquo;</a></p>
-    </div>
+    <div id="myCarousel" class="carousel slide">
+        <div class="carousel-inner">
+            <div class="item active">
+                <img src="${pageContext.request.contextPath}/static/img/tool-1957451_1280.jpg" alt="">
+                <div class="container">
+                    <div class="carousel-caption">
+                        <h1>Example headline.</h1>
+                        <p class="lead">Cras justo odio, dapibus ac facilisis in, egestas eget quam. Donec id elit non mi porta gravida at eget metus. Nullam id dolor id nibh ultricies vehicula ut id elit.</p>
+                        <a class="btn btn-large btn-primary" href="${pageContext.request.contextPath}/app/registration">Sign up today</a>
+                    </div>
+                </div>
+            </div>
+            <div class="item">
+                <img src="${pageContext.request.contextPath}/static/img/tool-1957451_1280.jpg" alt="">
+                <div class="container">
+                    <div class="carousel-caption">
+                        <h1>Another example headline.</h1>
+                        <p class="lead">Cras justo odio, dapibus ac facilisis in, egestas eget quam. Donec id elit non mi porta gravida at eget metus. Nullam id dolor id nibh ultricies vehicula ut id elit.</p>
+                        <a class="btn btn-large btn-primary" href="#">Learn more</a>
+                    </div>
+                </div>
+            </div>
+            <div class="item">
+                <img src="${pageContext.request.contextPath}/static/img/tool-1957451_1280.jpg" alt="">
+                <div class="container">
+                    <div class="carousel-caption">
+                        <h1>One more for good measure.</h1>
+                        <p class="lead">Cras justo odio, dapibus ac facilisis in, egestas eget quam. Donec id elit non mi porta gravida at eget metus. Nullam id dolor id nibh ultricies vehicula ut id elit.</p>
+                        <a class="btn btn-large btn-primary" href="#">Browse gallery</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <a class="left carousel-control" href="#myCarousel" data-slide="prev">&lsaquo;</a>
+        <a class="right carousel-control" href="#myCarousel" data-slide="next">&rsaquo;</a>
+    </div><!-- /.carousel -->
 
     <!-- Example row of columns -->
     <div class="row">

@@ -13,22 +13,21 @@
 
 </head>
 <body>
-<p>Action master</p>
-<jsp:include page="../views/header.jsp"/>
+<h1>Request for master</h1>
+<jsp:include page="../views/header_nlogout.jsp"/>
 
 <div>
 
     <c:forEach var="request" items="${requestScope.request}">
-        <c:if test="${request.accepted=='ACCEPTED'}">
+       <%-- <c:if test="${request.accepted=='ACCEPTED'}">--%>
             <ul>
                 <li>Content: <c:out value="${request.content}"/></li>
                 <li>Date: <c:out value="${request.date}"/></li>
                 <li>
-                    <form method="post" action="${pageContext.request.contextPath}/app/actionManager">
+                    <form method="post" action="${pageContext.request.contextPath}/app/actionMaster">
                         <label>Status
-                            <input type="radio" name="radio${request.id}" value="ACCEPTED">Accepted
-                            <input type="radio" name="radio${request.id}" value="REJECTED">Rejected
-                            <input class="span2" name="comment" id="comment" type="text" placeholder="">
+                            <input type="radio" name="radio${request.id}" value="IN_PROCESS">In process
+                            <input type="radio" name="radio${request.id}" value="REJECTED">Ready
                             <input type="submit" name="action" value="OK" >
                             <input type="hidden" name="dN" value="${request.id}">
                         </label>
@@ -37,7 +36,7 @@
 
 
             </ul>
-        </c:if>
+       <%-- </c:if>--%>
     </c:forEach>
 </div>
 </body>

@@ -1,6 +1,9 @@
 package controller;
 
 import controller.command.*;
+import model.Pagination;
+import model.entity.Request;
+import model.service.RequestService;
 import model.service.UserService;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -9,8 +12,9 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 
-public class Servlet extends HttpServlet {
+public class Servlet extends AbstractController {
 
     private HashMap<String, Command> commands = new HashMap<String, Command>();
 
@@ -28,17 +32,26 @@ public class Servlet extends HttpServlet {
         commands.put("action", new ActionUser());
         commands.put("actionManager", new ActionManager());
         commands.put("actionMaster", new ActionMaster());
+        commands.put("reviewUser", new ReviewUser());
+        commands.put("reviewAll", new ReviewAll());
     }
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        doGet(req, resp);
+    //    processRequest(req, resp);
 
-        processRequest(req, resp);
     }
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp)
             throws ServletException, IOException {
+        RequestService requestService = new RequestService();
+        int offset = getOffset(req, 10);
+        List<Request> requests = requestService.findWithLimit(offset, 10);
+        req.setAttribute("list", requests);
+        Pagination pagination = new Pagination.Builder(req.getRequestURI() + "?", offset, requestService.findSize()).withLimit(10).build();
+        req.setAttribute("pagination", pagination);
 
         processRequest(req, resp);
     }
@@ -48,10 +61,7 @@ public class Servlet extends HttpServlet {
 
         String path = req.getRequestURI();
         path = path.replaceAll(".*/app/", "");
-        Command command = commands.get(path);
-
-
-        String page = command.execute(req);
+        String page = getPage(path, req);
         if (page.contains("redirect")) {
             resp.sendRedirect(page.replace("redirect:", ""));
 
@@ -59,6 +69,11 @@ public class Servlet extends HttpServlet {
                 req.getRequestDispatcher(page).forward(req, resp);
         }
 
+    }
+
+    private String getPage(String path, HttpServletRequest req) {
+        Command command = commands.get(path);
+        return command.execute(req);
     }
 }
 

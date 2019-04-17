@@ -3,8 +3,10 @@ package model.service;
 import model.dao.AccountDao;
 import model.dao.DaoFactory;
 import model.entity.Account;
+import model.entity.enums.Role;
 
 import javax.servlet.ServletContext;
+import java.util.List;
 import java.util.Optional;
 
 public class UserService {
@@ -36,6 +38,15 @@ public class UserService {
         try (AccountDao accountDao = daoFactory.createAccountDao()) {
             result = accountDao.findByEmail(account.getEmail()).isPresent();
         }
+        return result;
+    }
+    public Optional<Account> findAccountWithMinRequests(Role role) {
+        Optional<Account> result;
+
+        try (AccountDao accountDao = daoFactory.createAccountDao()) {
+            result = accountDao.findAccountWithMinRequests(role);
+        }
+
         return result;
     }
 

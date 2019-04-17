@@ -1,5 +1,7 @@
 package controller.command;
 
+import controller.AbstractController;
+
 import javax.servlet.http.HttpServletRequest;
 import java.util.Optional;
 
@@ -10,7 +12,7 @@ public class Logout extends AbstractController implements Command {
         Optional<Object> email = Optional.ofNullable(request.getSession().getAttribute("email"));
 
         email.ifPresent(e -> CommandUtility.unlogUser(request, e.toString()));
-
+        request.getSession().invalidate();
         return "redirect:login";
     }
 }

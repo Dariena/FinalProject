@@ -1,5 +1,6 @@
 package controller.command;
 
+import model.Pagination;
 import model.dao.AccountDao;
 import model.dao.DaoFactory;
 import model.entity.Account;
@@ -11,6 +12,7 @@ import javax.servlet.http.HttpServletRequest;
 import java.sql.Date;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.List;
 
 public class ActionManager implements Command {
     RequestService requestService = new RequestService();
@@ -18,8 +20,6 @@ public class ActionManager implements Command {
 
     @Override
     public String execute(HttpServletRequest request) {
-
-        request.setAttribute("request", requestService.show(request));
         if (request.getParameter("dN") != null) {
             int id = Integer.parseInt(request.getParameter("dN"));
             String comment = request.getParameter("comment");
@@ -30,10 +30,12 @@ public class ActionManager implements Command {
             req.setAccepted(State.valueOf(state.toUpperCase()));
             req.setComment(comment);
             requestService.update(req);
+
         }
 
-        return "/WEB-INF/manager/action.jsp";
+        request.setAttribute("request", requestService.showByState(request, State.UNREAD));
 
+        return "/WEB-INF/manager/action.jsp";
 
     }
 

@@ -5,10 +5,13 @@ import model.dao.DaoFactory;
 import model.dao.RequestDao;
 import model.entity.Account;
 import model.entity.Request;
+import model.entity.enums.Role;
+import model.entity.enums.State;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 public class RequestService {
     private List<Request> requestList = new ArrayList<>();
@@ -18,19 +21,29 @@ public class RequestService {
         Request result;
 
         try (RequestDao requestDao = daoFactory.createRequestDao()) {
-            result = requestDao.create(request, account);
+            result = requestDao.create(request, account, getManagerForRequest(Role.MANAGER).get());
         }
 
         return result;
     }
 
+
     public void update(Request request){
 
         try (RequestDao requestDao = daoFactory.createRequestDao()) {
-            requestDao.update(request);
+
+            requestDao.update(request, getManagerForRequest(Role.MASTER).get());
         }
     }
+    public List<Request> showByState(HttpServletRequest request, State state){
+        List<Request> result;
+        try (RequestDao requestDao = daoFactory.createRequestDao()) {
+            result = requestDao.findByState(getCurrentAccount(request).getEmail(), state);
+        }
 
+
+        return result;
+    }
     public List<Request> show(HttpServletRequest request){
         List<Request> result;
         try (RequestDao requestDao = daoFactory.createRequestDao()) {
@@ -42,6 +55,42 @@ public class RequestService {
     }
     public Account getCurrentAccount(HttpServletRequest request) {
         String email = (String) request.getSession().getAttribute("email");
-        return DaoFactory.getInstance().createAccountDao().findByEmail(email).get();
+        Account result;
+        try (AccountDao accountDao = daoFactory.createAccountDao()) {
+            result = accountDao.findByEmail(email).get();
+        }
+        return result;
     }
+    public Optional<Account> getManagerForRequest(Role role){
+        Optional<Account> result;
+        try (AccountDao accountDao = daoFactory.createAccountDao()) {
+            result = accountDao.findAccountWithMinRequests(role);
+        }
+        return result;
+    }
+    public List<Request> findAll() {
+        List<Request> result;
+        try (RequestDao requestDao = daoFactory.createRequestDao()) {
+            result = requestDao.findAll();
+        }
+        return result;
+    }
+
+    public int findSize() {
+        int result;
+        try (RequestDao requestDao = daoFactory.createRequestDao()) {
+            result = requestDao.findSize();
+        }
+        return result;
+    }
+
+    public List<Request> findWithLimit(int offset, int limit) {
+        List<Request> result;
+        try (RequestDao requestDao = daoFactory.createRequestDao()) {
+            result = requestDao.findWithLimit(offset, limit);
+        }
+        return result;
+
+    }
+
 }

@@ -1,10 +1,21 @@
 package model.entity;
 
 
+import java.sql.Date;
+
 public class Review {
     private int id;
-    private String date;
+    private Date date;
     private String content;
+    private String email;
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
 
     public int getId() {
         return id;
@@ -14,11 +25,11 @@ public class Review {
         this.id = id;
     }
 
-    public String getDate() {
+    public Date getDate() {
         return date;
     }
 
-    public void setDate(String date) {
+    public void setDate(Date date) {
         this.date = date;
     }
 
