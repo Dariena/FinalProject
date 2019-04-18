@@ -1,22 +1,11 @@
 package controller.command;
 
-import model.Pagination;
-import model.dao.AccountDao;
-import model.dao.DaoFactory;
-import model.entity.Account;
 import model.entity.Request;
 import model.entity.enums.State;
-import model.service.RequestService;
 
 import javax.servlet.http.HttpServletRequest;
-import java.sql.Date;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
-import java.util.List;
 
-public class ActionManager implements Command {
-    RequestService requestService = new RequestService();
-
+public class ActionManager extends AbstractController implements Command {
 
     @Override
     public String execute(HttpServletRequest request) {
@@ -32,8 +21,8 @@ public class ActionManager implements Command {
             requestService.update(req);
 
         }
-
-        request.setAttribute("request", requestService.showByState(request, State.UNREAD));
+        setPagination(request, State.UNREAD.name());
+        //request.setAttribute("request", requestService.showByState(request, State.UNREAD));
 
         return "/WEB-INF/manager/action.jsp";
 

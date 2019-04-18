@@ -1,6 +1,5 @@
 package controller.command;
 
-import controller.AbstractController;
 import model.entity.Account;
 import model.entity.enums.Role;
 import model.service.UserService;

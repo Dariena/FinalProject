@@ -35,6 +35,8 @@ public class RequestService {
             requestDao.update(request, getManagerForRequest(Role.MASTER).get());
         }
     }
+
+    // TODO remove
     public List<Request> showByState(HttpServletRequest request, State state){
         List<Request> result;
         try (RequestDao requestDao = daoFactory.createRequestDao()) {
@@ -76,18 +78,35 @@ public class RequestService {
         return result;
     }
 
-    public int findSize() {
+    public int findSize(String email, String state) {
         int result;
         try (RequestDao requestDao = daoFactory.createRequestDao()) {
-            result = requestDao.findSize();
+            result = requestDao.findSize(email, state);
         }
         return result;
     }
 
-    public List<Request> findWithLimit(int offset, int limit) {
+    public int findSize(String email) {
+        int result;
+        try (RequestDao requestDao = daoFactory.createRequestDao()) {
+            result = requestDao.findSize(email);
+        }
+        return result;
+    }
+
+    public List<Request> findWithLimit(int offset, int limit, Account account, String state) {
         List<Request> result;
         try (RequestDao requestDao = daoFactory.createRequestDao()) {
-            result = requestDao.findWithLimit(offset, limit);
+            result = requestDao.findWithLimit(offset, limit, account, state);
+        }
+        return result;
+
+    }
+
+    public List<Request> findWithLimit(int offset, int limit, Account account) {
+        List<Request> result;
+        try (RequestDao requestDao = daoFactory.createRequestDao()) {
+            result = requestDao.findWithLimit(offset, limit, account);
         }
         return result;
 

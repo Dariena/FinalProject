@@ -1,4 +1,5 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="tags" tagdir="/WEB-INF/tags" %>
 <%--
   Created by IntelliJ IDEA.
   User: dasha
@@ -18,7 +19,7 @@
 
 <div>
 
-    <c:forEach var="request" items="${requestScope.request}">
+    <c:forEach var="request" items="${requestScope.list}">
         <%--<c:if test="${request.accepted=='UNREAD'}">--%>
         <ul>
             <li>Content: <c:out value="${request.content}"/></li>
@@ -39,6 +40,8 @@
         </ul>
        <%-- </c:if>--%>
     </c:forEach>
+
+    <tags:pagination pagination="${requestScope.pagination}"/>
 </div>
 </body>
 </html>

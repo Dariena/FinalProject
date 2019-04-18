@@ -15,19 +15,27 @@ public class JDBCRequestFactory implements RequestDao {
     private static final String SQL_INSERT_MASTER = "INSERT INTO account_has_request (emailaccount,request_idrequest) values(?,?)";
     private static final String SQL_UPDATE = "UPDATE request SET comment = ?, accepted = ? WHERE idrequest = ?";
     private static final String SQL_UPDATE_STATE = "UPDATE request SET accepted = ? WHERE idrequest = ?";
-    private static final String SQL_FIND_LIMIT_CONFERENCE = "SELECT * FROM request LIMIT ? OFFSET ?";
-    private static final String SQL_GET_SIZE = "SELECT COUNT(*) FROM request";
-    private Connection connection;
+    private static final String SQL_FIND_LIMIT_CONFERENCE =
+            "SELECT * FROM account_has_request accreq " +
+                    "LEFT JOIN request req ON accreq.request_idrequest = req.idrequest " +
+                    "WHERE emailaccount = ? AND (accepted = ? or accepted is not null) LIMIT ? OFFSET ?";
+
+    private static final String SQL_FIND_LIMIT_CONFERENCE_USER = "SELECT * FROM account_has_request accreq " +
+            "LEFT JOIN request req ON accreq.request_idrequest = req.idrequest " +
+            "WHERE emailaccount = ? LIMIT ? OFFSET ?";
+    private static final String SQL_GET_SIZE = "SELECT COUNT(*) FROM account_has_request accreq " +
+            "LEFT JOIN request req ON accreq.request_idrequest = req.idrequest " +
+            "WHERE emailaccount = ? AND (accepted = ? or accepted is not null)";
+    Connection connection;
 
     public JDBCRequestFactory(Connection connection) {
         this.connection = connection;
     }
 
 
-
     @Override
     public Request create(Request entity, Account account, Account managerAccount) {
-        try(PreparedStatement preparedStatement = connection.prepareStatement(SQL_INSERT, Statement.RETURN_GENERATED_KEYS)) {
+        try (PreparedStatement preparedStatement = connection.prepareStatement(SQL_INSERT, Statement.RETURN_GENERATED_KEYS)) {
             preparedStatement.setString(1, entity.getContent());
             preparedStatement.setDate(2, entity.getDate());
             preparedStatement.setString(3, entity.getComment());
@@ -44,9 +52,7 @@ public class JDBCRequestFactory implements RequestDao {
             statement.setString(3, managerAccount.getEmail());
             statement.setInt(4, requestId);
             statement.execute();
-        }
-
-        catch (SQLException e) {
+        } catch (SQLException e) {
             e.printStackTrace();
         }
 
@@ -59,15 +65,15 @@ public class JDBCRequestFactory implements RequestDao {
         List<Integer> list = new ArrayList<>();
         String query = "SELECT request_idrequest FROM account_has_request WHERE emailaccount = ?";
 
-        try(PreparedStatement ps = connection.prepareCall(query)) {
+        try (PreparedStatement ps = connection.prepareCall(query)) {
 
             ps.setString(1, email);
             ResultSet rs = ps.executeQuery();
 
-            while(rs.next()) {
+            while (rs.next()) {
                 list.add(rs.getInt(1));
             }
-            for(Integer list1: list){
+            for (Integer list1 : list) {
                 requests.add(findById(list1));
             }
             return requests;
@@ -85,16 +91,16 @@ public class JDBCRequestFactory implements RequestDao {
         String query = "SELECT request_idrequest FROM account_has_request accreq " +
                 "LEFT JOIN request req ON accreq.request_idrequest = req.idrequest WHERE emailaccount = ? AND accepted = ? ";
 
-        try(PreparedStatement ps = connection.prepareCall(query)) {
+        try (PreparedStatement ps = connection.prepareCall(query)) {
 
             ps.setString(1, email);
             ps.setString(2, state.name());
             ResultSet rs = ps.executeQuery();
 
-            while(rs.next()) {
+            while (rs.next()) {
                 list.add(rs.getInt(1));
             }
-            for(Integer list1: list){
+            for (Integer list1 : list) {
                 requests.add(findById(list1));
             }
             return requests;
@@ -113,16 +119,16 @@ public class JDBCRequestFactory implements RequestDao {
 
     @Override
     public Request findById(int id) {
-       Request request = new Request();
+        Request request = new Request();
         final String query = "select * from request where idrequest = ?";
-        try(PreparedStatement st = connection.prepareCall(query)){
-            st.setInt(1,id);
+        try (PreparedStatement st = connection.prepareCall(query)) {
+            st.setInt(1, id);
             ResultSet rs = st.executeQuery();
 
             RequestMapper requestMapper = new RequestMapper();
 
-            if(rs.next()) {
-               request = requestMapper.extractFromResultSet(rs);
+            if (rs.next()) {
+                request = requestMapper.extractFromResultSet(rs);
             }
 
             return request;
@@ -135,21 +141,20 @@ public class JDBCRequestFactory implements RequestDao {
     }
 
 
-
     @Override
     public List<Request> findAll() {
         Map<Integer, Request> requests = new HashMap<>();
 
         final String query = "select * from request";
 
-        try(Statement st = connection.createStatement()){
+        try (Statement st = connection.createStatement()) {
 
             ResultSet rs = st.executeQuery(query);
 
 
             RequestMapper requestMapper = new RequestMapper();
 
-            while(rs.next()) {
+            while (rs.next()) {
                 Request request = requestMapper.extractFromResultSet(rs);
                 requestMapper.makeUnique(requests, request);
             }
@@ -163,11 +168,13 @@ public class JDBCRequestFactory implements RequestDao {
     }
 
     @Override
-    public int findSize() {
+    public int findSize(String email, String state) {
         int result = 0;
-        try(Statement st = connection.createStatement()){
+        try (PreparedStatement st = connection.prepareCall(SQL_GET_SIZE)) {
+            st.setString(1, email);
+            st.setString(2, state);
+            ResultSet rs = st.executeQuery();
 
-            ResultSet rs = st.executeQuery(SQL_GET_SIZE);
             if (rs.next()) {
                 result = rs.getInt(1);
             }
@@ -222,25 +229,25 @@ public class JDBCRequestFactory implements RequestDao {
     }
 
     @Override
-    public List<Request> findWithLimit(int offset, int limit){
+    public List<Request> findWithLimit(int offset, int limit, Account account, String state) {
         List<Request> result = new ArrayList<>();
-        try(PreparedStatement preparedStatement = connection.prepareStatement(SQL_FIND_LIMIT_CONFERENCE)) {
-            preparedStatement.setInt(1, limit);
-            preparedStatement.setInt(2, offset);
+        try (PreparedStatement preparedStatement = connection.prepareStatement(SQL_FIND_LIMIT_CONFERENCE)) {
+            preparedStatement.setString(1, account.getEmail());
+            preparedStatement.setString(2, state);
+            preparedStatement.setInt(3, limit);
+            preparedStatement.setInt(4, offset);
+            ResultSet resultSet = preparedStatement.executeQuery();
 
             RequestMapper requestMapper = new RequestMapper();
-            ResultSet resultSet = preparedStatement.executeQuery();
-            while(resultSet.next()) {
+            while (resultSet.next()) {
                 result.add(requestMapper.extractFromResultSet(resultSet));
             }
             return result;
-        }catch (SQLException e){
+        } catch (SQLException e) {
             e.printStackTrace();
         }
         return null;
     }
-
-
 
     @Override
     public void delete(int id) {

@@ -14,7 +14,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 
-public class Servlet extends AbstractController {
+public class Servlet extends HttpServlet {
 
     private HashMap<String, Command> commands = new HashMap<String, Command>();
 
@@ -38,20 +38,14 @@ public class Servlet extends AbstractController {
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        doGet(req, resp);
-    //    processRequest(req, resp);
+       // doGet(req, resp);
+        processRequest(req, resp);
 
     }
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp)
             throws ServletException, IOException {
-        RequestService requestService = new RequestService();
-        int offset = getOffset(req, 10);
-        List<Request> requests = requestService.findWithLimit(offset, 10);
-        req.setAttribute("list", requests);
-        Pagination pagination = new Pagination.Builder(req.getRequestURI() + "?", offset, requestService.findSize()).withLimit(10).build();
-        req.setAttribute("pagination", pagination);
 
         processRequest(req, resp);
     }

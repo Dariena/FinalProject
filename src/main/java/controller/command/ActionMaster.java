@@ -6,8 +6,7 @@ import model.service.RequestService;
 
 import javax.servlet.http.HttpServletRequest;
 
-public class ActionMaster implements Command {
-    RequestService requestService = new RequestService();
+public class ActionMaster extends AbstractController implements Command {
 
     @Override
     public String execute(HttpServletRequest request) {
@@ -19,7 +18,8 @@ public class ActionMaster implements Command {
             req.setAccepted(State.valueOf(state.toUpperCase()));
             requestService.update(req);
         }
-        request.setAttribute("request", requestService.showByState(request, State.ACCEPTED));
+        setPagination(request, State.ACCEPTED.name());
+        //request.setAttribute("request", requestService.showByState(request, State.ACCEPTED));
         return "/WEB-INF/master/action.jsp";
     }
 
