@@ -18,7 +18,7 @@
 <h1>Make your request</h1>
 <jsp:include page="../views/header_nlogout.jsp"/>
 <form class="navbar-form pull-right" method="post" action="${pageContext.request.contextPath}/app/action">
-    <input class="span2" name="content" id="content" type="text" placeholder="">
+    <input class="span2" name="content" id="content" type="text" placeholder="" required>
     <button type="submit" class="btn" value="Request">Create</button>
 
 </form>

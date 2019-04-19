@@ -20,16 +20,15 @@
 <div>
 
     <c:forEach var="request" items="${requestScope.list}">
-        <%--<c:if test="${request.accepted=='UNREAD'}">--%>
         <ul>
             <li>Content: <c:out value="${request.content}"/></li>
             <li>Date: <c:out value="${request.date}"/></li>
             <li>
             <form method="post" action="${pageContext.request.contextPath}/app/actionManager">
             <label>Status
-                <input type="radio" name="radio${request.id}" value="ACCEPTED">Accepted
+                <input type="radio" name="radio${request.id}" value="ACCEPTED" checked>Accepted
                 <input type="radio" name="radio${request.id}" value="REJECTED">Rejected
-                <input class="span2" name="comment" id="comment" type="text" placeholder="">
+                <input class="span2" name="comment" id="comment" type="text" placeholder="" required>
                 <input type="submit" name="action" value="OK" >
                 <input type="hidden" name="dN" value="${request.id}">
             </label>
@@ -38,7 +37,6 @@
 
 
         </ul>
-       <%-- </c:if>--%>
     </c:forEach>
 
     <tags:pagination pagination="${requestScope.pagination}"/>

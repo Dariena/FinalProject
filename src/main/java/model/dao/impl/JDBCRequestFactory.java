@@ -32,7 +32,9 @@ public class JDBCRequestFactory implements RequestDao {
 
     @Override
     public Request create(Request entity, Account account, Account managerAccount) {
+
         try (PreparedStatement preparedStatement = connection.prepareStatement(SQL_INSERT, Statement.RETURN_GENERATED_KEYS)) {
+            connection.setAutoCommit(false);
             preparedStatement.setString(1, entity.getContent());
             preparedStatement.setDate(2, entity.getDate());
             preparedStatement.setString(3, entity.getComment());
@@ -49,6 +51,7 @@ public class JDBCRequestFactory implements RequestDao {
             statement.setString(3, managerAccount.getEmail());
             statement.setInt(4, requestId);
             statement.execute();
+            connection.commit();
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -169,6 +172,7 @@ public class JDBCRequestFactory implements RequestDao {
         if (request.getComment() == null)
             query = SQL_UPDATE_STATE;
         try (PreparedStatement st = connection.prepareCall(query)) {
+            connection.setAutoCommit(false);
             if (query.equals(SQL_UPDATE)) {
                 st.setString(1, request.getComment());
                 st.setString(2, request.getAccepted().name());
@@ -178,23 +182,17 @@ public class JDBCRequestFactory implements RequestDao {
                 st.setInt(2, request.getId());
             }
             st.executeUpdate();
+            if (request.getAccepted().name().equals("ACCEPTED")) {
+
+                PreparedStatement statement = connection.prepareCall(SQL_INSERT_MASTER);
+                statement.setString(1, accountMaster.getEmail());
+                statement.setInt(2, request.getId());
+
+                statement.execute();
+            }
+            connection.commit();
         } catch (SQLException e) {
             e.printStackTrace();
-
-        }
-        if (request.getAccepted().name().equals("ACCEPTED")) {
-
-            try (PreparedStatement st = connection.prepareCall(SQL_INSERT_MASTER)) {
-                st.setString(1, accountMaster.getEmail());
-                st.setInt(2, request.getId());
-
-                st.execute();
-            } catch (SQLException e) {
-                e.printStackTrace();
-
-            }
-
-
         }
     }
 

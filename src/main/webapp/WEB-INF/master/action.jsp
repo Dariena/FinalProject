@@ -20,24 +20,20 @@
 <div>
 
     <c:forEach var="request" items="${requestScope.list}">
-       <%-- <c:if test="${request.accepted=='ACCEPTED'}">--%>
             <ul>
                 <li>Content: <c:out value="${request.content}"/></li>
                 <li>Date: <c:out value="${request.date}"/></li>
                 <li>
                     <form method="post" action="${pageContext.request.contextPath}/app/actionMaster">
                         <label>Status
-                            <input type="radio" name="radio${request.id}" value="IN_PROCESS">In process
-                            <input type="radio" name="radio${request.id}" value="REJECTED">Ready
+                            <input type="radio" name="radio${request.id}" value="IN_PROCESS" checked>In process
+                            <input type="radio" name="radio${request.id}" value="READY">Ready
                             <input type="submit" name="action" value="OK" >
                             <input type="hidden" name="dN" value="${request.id}">
                         </label>
                     </form>
                 </li>
-
-
             </ul>
-       <%-- </c:if>--%>
     </c:forEach>
 
     <tags:pagination pagination="${requestScope.pagination}"/>
