@@ -55,6 +55,6 @@ public class Registration extends AbstractController implements Command {
 
         Optional<Object> roles = Optional.ofNullable(request.getSession().getAttribute("role"));
 
-        return roles.map(o -> "redirect:"+o.toString().toLowerCase()).orElse("redirect:login");
+        return roles.map(o -> "/WEB-INF/"+o.toString().toLowerCase()+"/login.jsp").orElse("/login.jsp");
     }
 }

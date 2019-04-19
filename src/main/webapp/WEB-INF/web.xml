@@ -28,6 +28,26 @@
     <url-pattern>/*</url-pattern>
   </filter-mapping>
 
+  <filter>
+    <filter-name>LocalizeFilter</filter-name>
+    <filter-class>controller.filters.LocalizeFilter</filter-class>
+  </filter>
+
+  <filter-mapping>
+    <filter-name>LocalizeFilter</filter-name>
+    <url-pattern>/*</url-pattern>
+  </filter-mapping>
+
+  <filter>
+    <filter-name>AuthFilter</filter-name>
+    <filter-class>controller.filters.AuthFilter</filter-class>
+  </filter>
+
+  <filter-mapping>
+    <filter-name>AuthFilter</filter-name>
+    <url-pattern>/*</url-pattern>
+  </filter-mapping>
+
   <session-config>
     <tracking-mode>COOKIE</tracking-mode>
   </session-config>

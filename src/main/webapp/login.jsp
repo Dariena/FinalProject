@@ -95,17 +95,27 @@
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
             </button>
-            <a class="brand" href="#">Your Repairs</a>
+            <a class="brand" href="${pageContext.request.contextPath}/app/home">${requestScope.langBundle.getString("YOUR_REPAIRS")}</a>
             <div class="nav-collapse collapse">
                 <ul class="nav">
-                    <li><a href="${pageContext.request.contextPath}/app/reviewAll">Reviews</a></li>
-                    <li><a href="#">Contact</a></li>
+                    <li><a href="${pageContext.request.contextPath}/app/reviewAll">${requestScope.langBundle.getString("REVIEWS")}</a></li>
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">${requestScope.langBundle.getString("LANGUAGE")} <b class="caret"></b></a>
+                        <ul class="dropdown-menu">
+
+                            <li><a type="submit" href="${pageContext.request.contextPath}/app/home?lang=uk_ua">${requestScope.langBundle.getString("UA")}</a></li>
+                            <li class="divider"></li>
+                            <li><a type="submit" href="${pageContext.request.contextPath}/app/home?lang=en_uk">${requestScope.langBundle.getString("EN")}</a></li>
+
+                        </ul>
+
+                    </li>
                 </ul>
-                <form class="navbar-form pull-right" method="post" action="${pageContext.request.contextPath}/app/login">
-                    <input class="span2" name="email" id="email" type="text" placeholder="Email">
-                    <input class="span2" name="password" id="password" type="password" placeholder="Password">
-                    <button type="submit" class="btn btn-primary" value="Login">Log In</button>
-                    <a  class="btn btn-primary" href="${pageContext.request.contextPath}/app/registration">Sign Up</a><br>
+                <form class="navbar-form pull-right" method="post" action="${pageContext.request.contextPath}/app/home">
+                    <input class="span2" name="email" id="email" type="text" placeholder="${requestScope.langBundle.getString("EMAIL")}">
+                    <input class="span2" name="password" id="password" type="password" placeholder="${requestScope.langBundle.getString("PASSWORD")}">
+                    <button type="submit" class="btn btn-primary" value="Login">${requestScope.langBundle.getString("LOG_IN")}</button>
+                    <a  class="btn btn-primary" href="${pageContext.request.contextPath}/app/registration">${requestScope.langBundle.getString("SIGN_UP")}</a><br>
 
                 </form>
             </div><!--/.nav-collapse -->
@@ -150,7 +160,6 @@
         <a class="left carousel-control" href="#myCarousel" data-slide="prev">&lsaquo;</a>
         <a class="right carousel-control" href="#myCarousel" data-slide="next">&rsaquo;</a>
     </div><!-- /.carousel -->
-
     <!-- Example row of columns -->
     <div class="row">
         <div class="span4">

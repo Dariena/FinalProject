@@ -95,18 +95,27 @@
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
             </button>
-            <a class="brand" href="#">Your Repairs</a>
+            <a class="brand" href="${pageContext.request.contextPath}/app/home">Your Repairs</a>
             <div class="nav-collapse collapse">
                 <ul class="nav">
-                    <li class="active"><a href="#">Home</a></li>
-                    <li><a href="${pageContext.request.contextPath}/app/reviewAll">Reviews</a></li>
-                    <li><a href="#">Contact</a></li>
+                    <li><a href="${pageContext.request.contextPath}/app/reviewAll">${requestScope.langBundle.getString("REVIEWS")}</a></li>
                     <li class="dropdown">
-                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">My office <b class="caret"></b></a>
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">${requestScope.langBundle.getString("LANGUAGE")} <b class="caret"></b></a>
                         <ul class="dropdown-menu">
-                            <li><a href=${pageContext.request.contextPath}/app/actionManager>Action</a></li>
+
+                            <li><a type="submit" href="${pageContext.request.contextPath}/app/home?lang=uk_ua">${requestScope.langBundle.getString("UA")}</a></li>
                             <li class="divider"></li>
-                            <li> <a class="nav-link" href="${pageContext.request.contextPath}/app/logout">Logout</a></li>
+                            <li><a type="submit" href="${pageContext.request.contextPath}/app/home?lang=en_uk">${requestScope.langBundle.getString("EN")}</a></li>
+
+                        </ul>
+
+                    </li>
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">${requestScope.langBundle.getString("MY_OFFICE")}<b class="caret"></b></a>
+                        <ul class="dropdown-menu">
+                            <li><a href=${pageContext.request.contextPath}/app/actionManager>${requestScope.langBundle.getString("REQUESTS")}</a></li>
+                            <li class="divider"></li>
+                            <li> <a class="nav-link" href="${pageContext.request.contextPath}/app/logout">${requestScope.langBundle.getString("LOG_OUT")}</a></li>
                         </ul>
                     </li>
                 </ul>

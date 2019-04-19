@@ -10,9 +10,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
+import java.util.*;
 
 public class Servlet extends HttpServlet {
 
@@ -23,7 +21,7 @@ public class Servlet extends HttpServlet {
         getServletContext().setAttribute("loggedUsers", new HashSet<String>());
 
         commands.put("registration", new Registration(new UserService()));
-        commands.put("login", new Login(new UserService()));
+      //  commands.put("login", new Login(new UserService()));
         commands.put("manager", new Manager());
         commands.put("master", new Master());
         commands.put("user", new User());
@@ -38,7 +36,6 @@ public class Servlet extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-       // doGet(req, resp);
         processRequest(req, resp);
 
     }
@@ -47,27 +44,31 @@ public class Servlet extends HttpServlet {
     protected void doGet(HttpServletRequest req, HttpServletResponse resp)
             throws ServletException, IOException {
 
-        processRequest(req, resp);
+            processRequest(req, resp);
     }
 
     private void processRequest(HttpServletRequest req, HttpServletResponse resp)
             throws IOException, ServletException {
-
         String path = req.getRequestURI();
         path = path.replaceAll(".*/app/", "");
         String page = getPage(path, req);
         if (page.contains("redirect")) {
             resp.sendRedirect(page.replace("redirect:", ""));
-
         } else {
-                req.getRequestDispatcher(page).forward(req, resp);
+            req.getRequestDispatcher(page).forward(req, resp);
         }
 
+       // }
+      //  resp.sendRedirect(getServletContext().getContextPath());
     }
 
     private String getPage(String path, HttpServletRequest req) {
-        Command command = commands.get(path);
-        return command.execute(req);
+        String result = req.getContextPath();
+        Optional<Command> command = Optional.ofNullable(commands.get(path));
+        if (command.isPresent()) {
+            result = command.get().execute(req);
+        }
+        return result;
     }
 }
 

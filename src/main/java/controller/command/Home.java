@@ -10,7 +10,7 @@ public class Home extends AbstractController implements Command {
     public String execute(HttpServletRequest request) {
         Optional<Object> role = Optional.ofNullable(request.getSession().getAttribute("role"));
 
-     return role.map(o -> "redirect:"+o.toString().toLowerCase()).orElse("redirect:login");
+     return role.map(o -> "/WEB-INF/"+o.toString().toLowerCase()+"/login.jsp").orElse("/login.jsp");
 
     }
 

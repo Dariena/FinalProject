@@ -86,27 +86,10 @@ public class RequestService {
         return result;
     }
 
-    public int findSize(String email) {
-        int result;
-        try (RequestDao requestDao = daoFactory.createRequestDao()) {
-            result = requestDao.findSize(email);
-        }
-        return result;
-    }
-
     public List<Request> findWithLimit(int offset, int limit, Account account, String state) {
         List<Request> result;
         try (RequestDao requestDao = daoFactory.createRequestDao()) {
             result = requestDao.findWithLimit(offset, limit, account, state);
-        }
-        return result;
-
-    }
-
-    public List<Request> findWithLimit(int offset, int limit, Account account) {
-        List<Request> result;
-        try (RequestDao requestDao = daoFactory.createRequestDao()) {
-            result = requestDao.findWithLimit(offset, limit, account);
         }
         return result;
 
