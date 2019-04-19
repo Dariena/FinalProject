@@ -13,13 +13,12 @@ public class ActionMaster extends AbstractController implements Command {
         if (request.getParameter("dN") != null) {
             int id = Integer.parseInt(request.getParameter("dN"));
             String state = request.getParameter("radio" + id);
-            Request req = new Request();
-            req.setId(id);
-            req.setAccepted(State.valueOf(state.toUpperCase()));
+            Request req = new Request(id,State.valueOf(state.toUpperCase()));
             requestService.update(req);
+            LOGGER.info(State.valueOf(state.toUpperCase())+" successfully updated status of request");
         }
         setPagination(request, State.ACCEPTED.name());
-        //request.setAttribute("request", requestService.showByState(request, State.ACCEPTED));
+
         return "/WEB-INF/master/action.jsp";
     }
 

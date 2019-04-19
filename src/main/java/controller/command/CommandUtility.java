@@ -6,9 +6,11 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.util.HashSet;
 
+
 public class CommandUtility {
 
-    public static void unlogUser(HttpServletRequest request, String email) {
+    static void unlogUser(HttpServletRequest request, String email) {
+        @SuppressWarnings("unchecked")
         HashSet<String> loggedUsers = (HashSet<String>)
                 request.getSession().getServletContext().getAttribute("loggedUsers");
 
@@ -21,7 +23,8 @@ public class CommandUtility {
         session.setAttribute("role", null);
     }
 
-    public static boolean cannotLogUser(HttpServletRequest request, String email, Role role){
+    public static boolean cannotLogUser(HttpServletRequest request, String email){
+        @SuppressWarnings("unchecked")
         HashSet<String> loggedUsers = (HashSet<String>) request.getSession().getServletContext()
                 .getAttribute("loggedUsers");
 
@@ -32,10 +35,6 @@ public class CommandUtility {
         loggedUsers.add(email);
         request.getSession().getServletContext().setAttribute("loggedUsers", loggedUsers);
 
-    //    HttpSession session = request.getSession();
-
-    //    session.setAttribute("email", email);
-    //    session.setAttribute("role", role);
 
         return false;
     }

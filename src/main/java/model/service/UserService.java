@@ -3,16 +3,13 @@ package model.service;
 import model.dao.AccountDao;
 import model.dao.DaoFactory;
 import model.entity.Account;
-import model.entity.enums.Role;
-
-import javax.servlet.ServletContext;
-import java.util.List;
+import javax.servlet.http.HttpServletRequest;
 import java.util.Optional;
 
 public class UserService {
 
 
-    DaoFactory daoFactory = DaoFactory.getInstance();
+   private DaoFactory daoFactory = DaoFactory.getInstance();
 
     public Optional<Account> login(String email) {
         Optional<Account> result;
@@ -40,13 +37,13 @@ public class UserService {
         }
         return result;
     }
-    public Optional<Account> findAccountWithMinRequests(Role role) {
-        Optional<Account> result;
 
+    public Account getCurrentAccount(HttpServletRequest request) {
+        String email = (String) request.getSession().getAttribute("email");
+        Account result;
         try (AccountDao accountDao = daoFactory.createAccountDao()) {
-            result = accountDao.findAccountWithMinRequests(role);
+            result = accountDao.findByEmail(email).get();
         }
-
         return result;
     }
 

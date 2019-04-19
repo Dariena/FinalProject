@@ -2,11 +2,8 @@ package model.dao.impl;
 
 import model.dao.AccountDao;
 import model.dao.mapper.AccountMapper;
-import model.dao.mapper.ReviewMapper;
 import model.entity.Account;
-import model.entity.Review;
 import model.entity.enums.Role;
-
 import java.sql.*;
 import java.util.*;
 
@@ -14,17 +11,9 @@ public class JDBCAccountFactory implements AccountDao {
 
     private Connection connection;
     private static final String SQL_INSERT = "INSERT INTO account (firstNameUk,surNameUk,firstNameUa,surNameUa,role,password, email, phone) VALUES(?,?,?,?,?,?,?,?)";
-    private static final String SQL_SELECT_EMAIL_WITH_MIN_REQUESTS="select down (1) with ties "+
-            "emailaccount, count(*) cntName" +
-            "from account_has_request" +
-            "group by emailaccount" +
-            "order by cntName desc";
-
-    //private static final String SQL2="SELECT *  FROM account_has_request accreqq right join  account acc ON accreqq.emailaccount = acc.email WHERE role=? group by emailaccount ORDER BY count(emailaccount) asc ";
-   // private static final String SQL2="SELECT emailaccount, count(*) AS c FROM account_has_request RIGHT JOIN account ON account_has_request.emailaccount = account.email WHERE role=? GROUP BY emailaccount HAVING  c > 1 order by c ASC";
     private static final String SQL2="SELECT *  FROM account_has_request RIGHT JOIN  account ON account.email = account_has_request.emailaccount WHERE role=? group by emailaccount ORDER BY count(emailaccount) asc" ;
 
-    public JDBCAccountFactory(Connection connection) {
+    JDBCAccountFactory(Connection connection) {
 
         this.connection = connection;
     }

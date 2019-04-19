@@ -15,7 +15,6 @@ public class Account {
     private String email;
     private String password;
     private String phone;
-    private List<Request> requests;
 
 
     public int getId() {
@@ -90,4 +89,25 @@ public class Account {
         this.phone = phone;
     }
 
+    public Account(int id, Role role, String firstNameUk, String surNameUk, String firstNameUa, String surNameUa, String email, String password) {
+        this.id = id;
+        this.role = role;
+        this.firstNameUk = firstNameUk;
+        this.surNameUk = surNameUk;
+        this.firstNameUa = firstNameUa;
+        this.surNameUa = surNameUa;
+        this.email = email;
+        this.password = password;
+    }
+
+    public Account(String firstNameUk, String surNameUk, String firstNameUa, String surNameUa, Role role, String email, String password, String phone) {
+        this.role = role;
+        this.firstNameUk = firstNameUk;
+        this.surNameUk = surNameUk;
+        this.firstNameUa = firstNameUa;
+        this.surNameUa = surNameUa;
+        this.email = email;
+        this.password = password;
+        this.phone = phone;
+    }
 }

@@ -11,6 +11,7 @@ public class Logout extends AbstractController implements Command {
 
         email.ifPresent(e -> CommandUtility.unlogUser(request, e.toString()));
         request.getSession().invalidate();
+        LOGGER.info("User successfully log out");
         return "redirect:home";
     }
 }

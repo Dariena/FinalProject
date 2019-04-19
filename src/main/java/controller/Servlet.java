@@ -1,27 +1,29 @@
 package controller;
 
 import controller.command.*;
-import model.Pagination;
-import model.entity.Request;
-import model.service.RequestService;
+import controller.filters.AuthFilter;
 import model.service.UserService;
+import org.apache.log4j.Logger;
+
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.*;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Optional;
 
 public class Servlet extends HttpServlet {
 
     private HashMap<String, Command> commands = new HashMap<String, Command>();
+    private static final Logger LOGGER = Logger.getLogger(AuthFilter.class);
 
     @Override
     public void init() throws ServletException {
         getServletContext().setAttribute("loggedUsers", new HashSet<String>());
 
         commands.put("registration", new Registration(new UserService()));
-      //  commands.put("login", new Login(new UserService()));
         commands.put("manager", new Manager());
         commands.put("master", new Master());
         commands.put("user", new User());
@@ -32,6 +34,7 @@ public class Servlet extends HttpServlet {
         commands.put("actionMaster", new ActionMaster());
         commands.put("reviewUser", new ReviewUser());
         commands.put("reviewAll", new ReviewAll());
+        LOGGER.info("Servlet initialization is successfully");
     }
 
     @Override
@@ -44,7 +47,7 @@ public class Servlet extends HttpServlet {
     protected void doGet(HttpServletRequest req, HttpServletResponse resp)
             throws ServletException, IOException {
 
-            processRequest(req, resp);
+        processRequest(req, resp);
     }
 
     private void processRequest(HttpServletRequest req, HttpServletResponse resp)
@@ -54,12 +57,10 @@ public class Servlet extends HttpServlet {
         String page = getPage(path, req);
         if (page.contains("redirect")) {
             resp.sendRedirect(page.replace("redirect:", ""));
+            LOGGER.info("Redirecting to " + page);
         } else {
             req.getRequestDispatcher(page).forward(req, resp);
         }
-
-       // }
-      //  resp.sendRedirect(getServletContext().getContextPath());
     }
 
     private String getPage(String path, HttpServletRequest req) {
@@ -67,7 +68,9 @@ public class Servlet extends HttpServlet {
         Optional<Command> command = Optional.ofNullable(commands.get(path));
         if (command.isPresent()) {
             result = command.get().execute(req);
+
         }
+        LOGGER.debug("Page is " + result);
         return result;
     }
 }

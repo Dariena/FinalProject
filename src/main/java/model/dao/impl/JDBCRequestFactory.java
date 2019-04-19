@@ -20,15 +20,12 @@ public class JDBCRequestFactory implements RequestDao {
                     "LEFT JOIN request req ON accreq.request_idrequest = req.idrequest " +
                     "WHERE emailaccount = ? AND (accepted = ? or accepted is not null) LIMIT ? OFFSET ?";
 
-    private static final String SQL_FIND_LIMIT_CONFERENCE_USER = "SELECT * FROM account_has_request accreq " +
-            "LEFT JOIN request req ON accreq.request_idrequest = req.idrequest " +
-            "WHERE emailaccount = ? LIMIT ? OFFSET ?";
     private static final String SQL_GET_SIZE = "SELECT COUNT(*) FROM account_has_request accreq " +
             "LEFT JOIN request req ON accreq.request_idrequest = req.idrequest " +
             "WHERE emailaccount = ? AND (accepted = ? or accepted is not null)";
-    Connection connection;
+    private Connection connection;
 
-    public JDBCRequestFactory(Connection connection) {
+    JDBCRequestFactory(Connection connection) {
         this.connection = connection;
     }
 
@@ -68,33 +65,6 @@ public class JDBCRequestFactory implements RequestDao {
         try (PreparedStatement ps = connection.prepareCall(query)) {
 
             ps.setString(1, email);
-            ResultSet rs = ps.executeQuery();
-
-            while (rs.next()) {
-                list.add(rs.getInt(1));
-            }
-            for (Integer list1 : list) {
-                requests.add(findById(list1));
-            }
-            return requests;
-        } catch (SQLException e) {
-            e.printStackTrace();
-            return null;
-        }
-
-    }
-
-    @Override
-    public List<Request> findByState(String email, State state) {
-        List<Request> requests = new ArrayList<>();
-        List<Integer> list = new ArrayList<>();
-        String query = "SELECT request_idrequest FROM account_has_request accreq " +
-                "LEFT JOIN request req ON accreq.request_idrequest = req.idrequest WHERE emailaccount = ? AND accepted = ? ";
-
-        try (PreparedStatement ps = connection.prepareCall(query)) {
-
-            ps.setString(1, email);
-            ps.setString(2, state.name());
             ResultSet rs = ps.executeQuery();
 
             while (rs.next()) {

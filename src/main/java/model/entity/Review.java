@@ -9,6 +9,18 @@ public class Review {
     private String content;
     private String email;
 
+    public Review(int id, Date date, String content, String email) {
+        this.id = id;
+        this.date = date;
+        this.content = content;
+        this.email = email;
+    }
+
+    public Review(Date date, String content) {
+        this.date = date;
+        this.content = content;
+    }
+
     public String getEmail() {
         return email;
     }

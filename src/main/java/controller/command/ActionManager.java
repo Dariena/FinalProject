@@ -14,15 +14,12 @@ public class ActionManager extends AbstractController implements Command {
             String comment = request.getParameter("comment");
             String state = request.getParameter("radio" + id);
 
-            Request req = new Request();
-            req.setId(id);
-            req.setAccepted(State.valueOf(state.toUpperCase()));
-            req.setComment(comment);
+            Request req = new Request(id,State.valueOf(state.toUpperCase()),comment);
             requestService.update(req);
+            LOGGER.info(State.valueOf(state.toUpperCase())+ " successfully change status of request");
 
         }
         setPagination(request, State.UNREAD.name());
-        //request.setAttribute("request", requestService.showByState(request, State.UNREAD));
 
         return "/WEB-INF/manager/action.jsp";
 

@@ -16,6 +16,35 @@ public class Request {
         return id;
     }
 
+    public Request(int id, State accepted) {
+        this.id = id;
+        this.accepted = accepted;
+    }
+
+    public Request(int id, State accepted, String comment) {
+        this.id = id;
+        this.accepted = accepted;
+        this.comment = comment;
+    }
+
+    public Request() {
+    }
+
+    public Request(String content, Date date, State accepted, String comment) {
+        this.content = content;
+        this.date = date;
+        this.accepted = accepted;
+        this.comment = comment;
+    }
+
+    public Request(int id, String content, Date date, State accepted, String comment) {
+        this.id = id;
+        this.content = content;
+        this.date = date;
+        this.accepted = accepted;
+        this.comment = comment;
+    }
+
     public void setId(int id) {
         this.id = id;
     }

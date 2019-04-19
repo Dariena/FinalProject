@@ -4,6 +4,7 @@ import model.Pagination;
 import model.entity.Account;
 import model.entity.Request;
 import model.service.RequestService;
+import model.service.UserService;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -13,6 +14,7 @@ public abstract class AbstractController {
     private HttpSession session;
 
     RequestService requestService = new RequestService();
+    UserService userService =new UserService();
 
     public HttpSession getSession() {
         return session;
@@ -36,10 +38,10 @@ public abstract class AbstractController {
         int defaultLimit = 10;
         int offset = getOffset(request, defaultLimit);
 
-        Account account = requestService.getCurrentAccount(request);
+        Account account = userService.getCurrentAccount(request);
         List<Request> requests;
         Pagination pagination;
-        requests = requestService.findWithLimit(offset, defaultLimit, requestService.getCurrentAccount(request), state);
+        requests = requestService.findWithLimit(offset, defaultLimit, userService.getCurrentAccount(request), state);
         pagination = new Pagination
                 .Builder(request.getRequestURI() + "?", offset,
                 requestService.findSize(account.getEmail(), state))

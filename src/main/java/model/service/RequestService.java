@@ -6,16 +6,13 @@ import model.dao.RequestDao;
 import model.entity.Account;
 import model.entity.Request;
 import model.entity.enums.Role;
-import model.entity.enums.State;
-
 import javax.servlet.http.HttpServletRequest;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
 public class RequestService {
-    private List<Request> requestList = new ArrayList<>();
     private DaoFactory daoFactory = DaoFactory.getInstance();
+    private UserService userService = new UserService();
 
     public Request create(Request request, Account account) {
         Request result;
@@ -36,33 +33,16 @@ public class RequestService {
         }
     }
 
-    // TODO remove
-    public List<Request> showByState(HttpServletRequest request, State state){
-        List<Request> result;
-        try (RequestDao requestDao = daoFactory.createRequestDao()) {
-            result = requestDao.findByState(getCurrentAccount(request).getEmail(), state);
-        }
-
-
-        return result;
-    }
     public List<Request> show(HttpServletRequest request){
         List<Request> result;
         try (RequestDao requestDao = daoFactory.createRequestDao()) {
-            result = requestDao.find(getCurrentAccount(request).getEmail());
+            result = requestDao.find(userService.getCurrentAccount(request).getEmail());
         }
 
 
         return result;
     }
-    public Account getCurrentAccount(HttpServletRequest request) {
-        String email = (String) request.getSession().getAttribute("email");
-        Account result;
-        try (AccountDao accountDao = daoFactory.createAccountDao()) {
-            result = accountDao.findByEmail(email).get();
-        }
-        return result;
-    }
+
     public Optional<Account> getManagerForRequest(Role role){
         Optional<Account> result;
         try (AccountDao accountDao = daoFactory.createAccountDao()) {
@@ -70,13 +50,7 @@ public class RequestService {
         }
         return result;
     }
-    public List<Request> findAll() {
-        List<Request> result;
-        try (RequestDao requestDao = daoFactory.createRequestDao()) {
-            result = requestDao.findAll();
-        }
-        return result;
-    }
+
 
     public int findSize(String email, String state) {
         int result;

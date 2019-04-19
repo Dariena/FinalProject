@@ -1,7 +1,6 @@
 package model.dao;
 
 import model.entity.Account;
-import model.entity.Request;
 import model.entity.Review;
 
 import java.util.List;
