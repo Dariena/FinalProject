@@ -11,6 +11,11 @@
 <html>
 <head>
     <title>Title</title>
+    <style>
+        .margin {
+            margin-top: 5%;
+        }
+    </style>
 
 </head>
 <body>

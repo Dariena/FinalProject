@@ -12,11 +12,25 @@
 <html>
 <head>
     <title>Title</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/2.3.1/css/bootstrap.min.css">
 
 </head>
 <body>
-<h1>Make your request</h1>
 <jsp:include page="../views/header_nlogout.jsp"/>
+<div class="nav-collapse collapse">
+<ul class="nav">
+    <li><a href="${pageContext.request.contextPath}/app/reviewAll">${requestScope.langBundle.getString("REVIEWS")}</a></li>
+    <li class="dropdown">
+        <a href="#" class="dropdown-toggle" data-toggle="dropdown">${requestScope.langBundle.getString("LANGUAGE")} <b class="caret"></b></a>
+        <ul class="dropdown-menu">
+
+            <li><a type="submit" href="${pageContext.request.contextPath}/app/home?lang=uk_ua">${requestScope.langBundle.getString("UA")}</a></li>
+            <li class="divider"></li>
+            <li><a type="submit" href="${pageContext.request.contextPath}/app/home?lang=en_uk">${requestScope.langBundle.getString("EN")}</a></li>
+        </ul>
+    </li>
+</ul>
+</div>
 <form class="navbar-form pull-right" method="post" action="${pageContext.request.contextPath}/app/action">
     <input class="span2" name="content" id="content" type="text" placeholder="" required>
     <button type="submit" class="btn" value="Request">Create</button>
@@ -33,7 +47,8 @@
     </ul>
     </c:forEach>
 
-    <tags:pagination pagination="${requestScope.pagination}"/>
+
 </div>
+<tags:pagination pagination="${pagination}"/>
 </body>
 </html>

@@ -69,7 +69,7 @@ public class Pagination extends AbstractModel{
     }
     public static class Builder extends AbstractModel{
         private static final int DEFAULT_MAX_PAGINATION_BUTTONS_PER_PAGE = 9;
-        private static final int DEFAULT_LIMIT_ITEMS_PER_PAGE = 10;
+        private static final int DEFAULT_LIMIT_ITEMS_PER_PAGE = 12;
         private String baseUrl;
         private int offset;
         private int limit;

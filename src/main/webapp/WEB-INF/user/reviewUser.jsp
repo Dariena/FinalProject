@@ -10,6 +10,7 @@
 <html>
 <head>
     <title>Review</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/2.3.1/css/bootstrap.min.css">
 </head>
 
 <body>

@@ -35,7 +35,7 @@ public abstract class AbstractController {
     }
 
     protected void setPagination(HttpServletRequest request, String state) {
-        int defaultLimit = 10;
+        int defaultLimit = 12;
         int offset = getOffset(request, defaultLimit);
 
         Account account = userService.getCurrentAccount(request);
@@ -45,7 +45,7 @@ public abstract class AbstractController {
         pagination = new Pagination
                 .Builder(request.getRequestURI() + "?", offset,
                 requestService.findSize(account.getEmail(), state))
-                .withLimit(10).build();
+                .withLimit(12).build();
         request.setAttribute("pagination", pagination);
         request.setAttribute("list", requests);
 

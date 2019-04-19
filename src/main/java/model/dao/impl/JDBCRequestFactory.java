@@ -18,7 +18,7 @@ public class JDBCRequestFactory implements RequestDao {
     private static final String SQL_FIND_LIMIT_CONFERENCE =
             "SELECT * FROM account_has_request accreq " +
                     "LEFT JOIN request req ON accreq.request_idrequest = req.idrequest " +
-                    "WHERE emailaccount = ? AND (accepted = ? or accepted is not null) LIMIT ? OFFSET ?";
+                    "WHERE emailaccount = ? AND (accepted = ?) LIMIT ? OFFSET ?";
 
     private static final String SQL_GET_SIZE = "SELECT COUNT(*) FROM account_has_request accreq " +
             "LEFT JOIN request req ON accreq.request_idrequest = req.idrequest " +
@@ -34,7 +34,7 @@ public class JDBCRequestFactory implements RequestDao {
     public Request create(Request entity, Account account, Account managerAccount) {
 
         try (PreparedStatement preparedStatement = connection.prepareStatement(SQL_INSERT, Statement.RETURN_GENERATED_KEYS)) {
-            connection.setAutoCommit(false);
+           // connection.setAutoCommit(false);
             preparedStatement.setString(1, entity.getContent());
             preparedStatement.setDate(2, entity.getDate());
             preparedStatement.setString(3, entity.getComment());
@@ -51,7 +51,7 @@ public class JDBCRequestFactory implements RequestDao {
             statement.setString(3, managerAccount.getEmail());
             statement.setInt(4, requestId);
             statement.execute();
-            connection.commit();
+            //connection.commit();
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -172,7 +172,7 @@ public class JDBCRequestFactory implements RequestDao {
         if (request.getComment() == null)
             query = SQL_UPDATE_STATE;
         try (PreparedStatement st = connection.prepareCall(query)) {
-            connection.setAutoCommit(false);
+            //connection.setAutoCommit(false);
             if (query.equals(SQL_UPDATE)) {
                 st.setString(1, request.getComment());
                 st.setString(2, request.getAccepted().name());
@@ -190,7 +190,7 @@ public class JDBCRequestFactory implements RequestDao {
 
                 statement.execute();
             }
-            connection.commit();
+            //connection.commit();
         } catch (SQLException e) {
             e.printStackTrace();
         }

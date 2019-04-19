@@ -7,25 +7,30 @@
     <title>All</title>
 
 
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/2.3.1/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css">
-
+    <style>
+        .margin{
+            margin-top: 5%;
+        }
+    </style>
 </head>
-<body class="d-flex flex-column h-100">
-
-
+<body>
 <jsp:include page="WEB-INF/views/header_nlogout.jsp"/>
 
-<div>
-    <c:forEach var="review" items="${sessionScope.review}">
-        <ul>
-            <li>Content: <c:out value="${review.content}"/></li>
-            <li>Date: <c:out value="${review.date}"/></li>
-            <li>User`s email: <c:out value="${review.email}"/></li>
-        </ul>
-    </c:forEach>
-</div>
+<div class="container">
 
+    <div class="row margin">
+        <c:forEach var="review" items="${sessionScope.review}">
+            <div class="col-md-6 mb-3">Content: <c:out value="${review.content}"/></div>
+            <div class="col-md-6 mb-3"> Date: <c:out value="${review.date}"/></div>
+            <div class="col-md-6 mb-3">User`s email: <c:out value="${review.email}"/></div>
+            <hr>
+        </c:forEach>
+
+    </div>
+
+</div>
 
 
 </body>

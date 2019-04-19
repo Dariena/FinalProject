@@ -68,6 +68,9 @@
     .carousel-caption .btn {
     margin-top: 10px;
     }
+    .margin {
+        margin-top: 5%;
+    }
 
     </style>
     <link type="text/css" href="${pageContext.request.contextPath}/static/css/bootstrap-responsive.css" rel="stylesheet">

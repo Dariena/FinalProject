@@ -115,7 +115,8 @@
                     <input class="span2" name="email" id="email" type="text" placeholder="${requestScope.langBundle.getString("EMAIL")}">
                     <input class="span2" name="password" id="password" type="password" placeholder="${requestScope.langBundle.getString("PASSWORD")}">
                     <button type="submit" class="btn btn-primary" value="Login">${requestScope.langBundle.getString("LOG_IN")}</button>
-                    <a  class="btn btn-primary" href="${pageContext.request.contextPath}/app/registration">${requestScope.langBundle.getString("SIGN_UP")}</a><br>
+
+                    <a class="btn btn-primary" href="${pageContext.request.contextPath}/app/registration">${requestScope.langBundle.getString("SIGN_UP")}</a><br>
 
                 </form>
             </div><!--/.nav-collapse -->
