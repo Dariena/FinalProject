@@ -4,6 +4,7 @@ import model.entity.Request;
 import model.entity.enums.State;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.List;
 
 public class ActionManager extends AbstractController implements Command {
 
@@ -19,7 +20,8 @@ public class ActionManager extends AbstractController implements Command {
             LOGGER.info(State.valueOf(state.toUpperCase())+ " successfully change status of request");
 
         }
-        setPagination(request, State.UNREAD.name());
+
+        setPagination(request, List.of(State.UNREAD.name()));
 
         return "/WEB-INF/manager/action.jsp";
 

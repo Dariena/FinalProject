@@ -12,6 +12,6 @@ public interface RequestDao extends GenericDao<Request> {
     List<Request> find(String email);
     void update(Request req, Account account);
     List<Request> findAll();
-    int findSize(String email, String state);
-    List<Request> findWithLimit(int offset, int limit,Account account, String state);
+    int findSize(String email, List<String> states);
+    List<Request> findWithLimit(int offset, int limit,Account account, List<String> states);
 }

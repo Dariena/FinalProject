@@ -34,17 +34,17 @@ public abstract class AbstractController {
         }
     }
 
-    protected void setPagination(HttpServletRequest request, String state) {
+    protected void setPagination(HttpServletRequest request, List<String> states) {
         int defaultLimit = 12;
         int offset = getOffset(request, defaultLimit);
 
         Account account = userService.getCurrentAccount(request);
         List<Request> requests;
         Pagination pagination;
-        requests = requestService.findWithLimit(offset, defaultLimit, userService.getCurrentAccount(request), state);
+        requests = requestService.findWithLimit(offset, defaultLimit, userService.getCurrentAccount(request), states);
         pagination = new Pagination
                 .Builder(request.getRequestURI() + "?", offset,
-                requestService.findSize(account.getEmail(), state))
+                requestService.findSize(account.getEmail(), states))
                 .withLimit(12).build();
         request.setAttribute("pagination", pagination);
         request.setAttribute("list", requests);

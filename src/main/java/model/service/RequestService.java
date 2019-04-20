@@ -43,7 +43,7 @@ public class RequestService {
         return result;
     }
 
-    public Optional<Account> getManagerForRequest(Role role){
+    private Optional<Account> getManagerForRequest(Role role){
         Optional<Account> result;
         try (AccountDao accountDao = daoFactory.createAccountDao()) {
             result = accountDao.findAccountWithMinRequests(role);
@@ -52,21 +52,27 @@ public class RequestService {
     }
 
 
-    public int findSize(String email, String state) {
+    public int findSize(String email, List<String> states) {
         int result;
         try (RequestDao requestDao = daoFactory.createRequestDao()) {
-            result = requestDao.findSize(email, state);
+            result = requestDao.findSize(email, states);
         }
         return result;
     }
 
-    public List<Request> findWithLimit(int offset, int limit, Account account, String state) {
+    public List<Request> findWithLimit(int offset, int limit, Account account, List<String> states) {
         List<Request> result;
         try (RequestDao requestDao = daoFactory.createRequestDao()) {
-            result = requestDao.findWithLimit(offset, limit, account, state);
+            result = requestDao.findWithLimit(offset, limit, account, states);
         }
         return result;
 
+    }
+    public void delete(int id){
+        try (RequestDao requestDao = daoFactory.createRequestDao()) {
+
+            requestDao.delete(id);
+        }
     }
 
 }

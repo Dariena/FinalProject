@@ -2,9 +2,9 @@ package controller.command;
 
 import model.entity.Request;
 import model.entity.enums.State;
-import model.service.RequestService;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.List;
 
 public class ActionMaster extends AbstractController implements Command {
 
@@ -17,7 +17,11 @@ public class ActionMaster extends AbstractController implements Command {
             requestService.update(req);
             LOGGER.info(State.valueOf(state.toUpperCase())+" successfully updated status of request");
         }
-        setPagination(request, State.ACCEPTED.name());
+
+        setPagination(request, List.of(
+                State.ACCEPTED.name(),
+                State.IN_PROCESS.name()
+        ));
 
         return "/WEB-INF/master/action.jsp";
     }

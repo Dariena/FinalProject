@@ -18,11 +18,12 @@ public class JDBCRequestFactory implements RequestDao {
     private static final String SQL_FIND_LIMIT_CONFERENCE =
             "SELECT * FROM account_has_request accreq " +
                     "LEFT JOIN request req ON accreq.request_idrequest = req.idrequest " +
-                    "WHERE emailaccount = ? AND (accepted = ?) LIMIT ? OFFSET ?";
+                    "WHERE emailaccount = ? AND accepted in (%s) LIMIT ? OFFSET ?";
 
     private static final String SQL_GET_SIZE = "SELECT COUNT(*) FROM account_has_request accreq " +
             "LEFT JOIN request req ON accreq.request_idrequest = req.idrequest " +
-            "WHERE emailaccount = ? AND (accepted = ? or accepted is not null)";
+            "WHERE emailaccount = ? AND accepted in (%s)";
+    private static final String SQL_DELETE_REQUEST = "DELETE from request where idrequest =?";
     private Connection connection;
 
     JDBCRequestFactory(Connection connection) {
@@ -34,7 +35,7 @@ public class JDBCRequestFactory implements RequestDao {
     public Request create(Request entity, Account account, Account managerAccount) {
 
         try (PreparedStatement preparedStatement = connection.prepareStatement(SQL_INSERT, Statement.RETURN_GENERATED_KEYS)) {
-           // connection.setAutoCommit(false);
+            connection.setAutoCommit(false);
             preparedStatement.setString(1, entity.getContent());
             preparedStatement.setDate(2, entity.getDate());
             preparedStatement.setString(3, entity.getComment());
@@ -51,7 +52,7 @@ public class JDBCRequestFactory implements RequestDao {
             statement.setString(3, managerAccount.getEmail());
             statement.setInt(4, requestId);
             statement.execute();
-            //connection.commit();
+            connection.commit();
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -141,11 +142,14 @@ public class JDBCRequestFactory implements RequestDao {
     }
 
     @Override
-    public int findSize(String email, String state) {
+    public int findSize(String email, List<String> states) {
         int result = 0;
-        try (PreparedStatement st = connection.prepareCall(SQL_GET_SIZE)) {
+        String query = String.format(SQL_GET_SIZE, preparePlaceHolders(states.size()));
+        try (PreparedStatement st = connection.prepareCall(query)) {
             st.setString(1, email);
-            st.setString(2, state);
+            for (int i = 2; i < states.size() + 2; i++) {
+                st.setString(i, states.get(i - 2));
+            }
             ResultSet rs = st.executeQuery();
 
             if (rs.next()) {
@@ -172,7 +176,7 @@ public class JDBCRequestFactory implements RequestDao {
         if (request.getComment() == null)
             query = SQL_UPDATE_STATE;
         try (PreparedStatement st = connection.prepareCall(query)) {
-            //connection.setAutoCommit(false);
+            connection.setAutoCommit(false);
             if (query.equals(SQL_UPDATE)) {
                 st.setString(1, request.getComment());
                 st.setString(2, request.getAccepted().name());
@@ -190,20 +194,23 @@ public class JDBCRequestFactory implements RequestDao {
 
                 statement.execute();
             }
-            //connection.commit();
+            connection.commit();
         } catch (SQLException e) {
             e.printStackTrace();
         }
     }
 
     @Override
-    public List<Request> findWithLimit(int offset, int limit, Account account, String state) {
+    public List<Request> findWithLimit(int offset, int limit, Account account, List<String> states) {
         List<Request> result = new ArrayList<>();
-        try (PreparedStatement preparedStatement = connection.prepareStatement(SQL_FIND_LIMIT_CONFERENCE)) {
+        String query = String.format(SQL_FIND_LIMIT_CONFERENCE, preparePlaceHolders(states.size()));
+        try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
             preparedStatement.setString(1, account.getEmail());
-            preparedStatement.setString(2, state);
-            preparedStatement.setInt(3, limit);
-            preparedStatement.setInt(4, offset);
+            for (int i = 2; i <= states.size() + 1; i++) {
+                preparedStatement.setString(i, states.get(i - 2));
+            }
+            preparedStatement.setInt(states.size() + 2, limit);
+            preparedStatement.setInt(states.size() + 3, offset);
             ResultSet resultSet = preparedStatement.executeQuery();
 
             RequestMapper requestMapper = new RequestMapper();
@@ -217,8 +224,20 @@ public class JDBCRequestFactory implements RequestDao {
         return null;
     }
 
+    public static String preparePlaceHolders(int length) {
+        return String.join(",", Collections.nCopies(length, "?"));
+    }
+
     @Override
     public void delete(int id) {
+        try (PreparedStatement st = connection.prepareCall(SQL_DELETE_REQUEST)) {
+            st.setInt(1, id);
+            st.executeUpdate();
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+
+        }
 
     }
 
