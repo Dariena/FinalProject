@@ -7,45 +7,32 @@ import model.service.RequestService;
 import model.service.UserService;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
 import java.util.List;
 
 public abstract class AbstractController {
-    private HttpSession session;
 
     RequestService requestService = new RequestService();
-    UserService userService =new UserService();
+    UserService userService = new UserService();
 
-    public HttpSession getSession() {
-        return session;
-    }
-
-    public void setSession(HttpSession session) {
-        this.session = session;
-    }
-
-    private final int getOffset(HttpServletRequest req, int limit) {
+    private int getOffset(HttpServletRequest req, int limit) {
+        int result = 0;
         String val = req.getParameter("page");
         if (val != null) {
             int page = Integer.parseInt(val);
-            return (page - 1) * limit;
-        } else {
-            return 0;
+            result = (page - 1) * limit;
         }
+
+        return result;
     }
 
-    protected void setPagination(HttpServletRequest request, List<String> states) {
+    void setPagination(HttpServletRequest request, List<String> states) {
         int defaultLimit = 12;
         int offset = getOffset(request, defaultLimit);
 
         Account account = userService.getCurrentAccount(request);
-        List<Request> requests;
-        Pagination pagination;
-        requests = requestService.findWithLimit(offset, defaultLimit, userService.getCurrentAccount(request), states);
-        pagination = new Pagination
-                .Builder(request.getRequestURI() + "?", offset,
-                requestService.findSize(account.getEmail(), states))
-                .withLimit(12).build();
+        List<Request> requests = requestService.findWithLimit(offset, defaultLimit, userService.getCurrentAccount(request), states);
+        Pagination pagination = new Pagination.Builder(request.getRequestURI() + "?", offset,
+                requestService.findSize(account.getEmail(), states)).withLimit(12).build();
         request.setAttribute("pagination", pagination);
         request.setAttribute("list", requests);
 

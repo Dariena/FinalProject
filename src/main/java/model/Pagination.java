@@ -3,7 +3,7 @@ package model;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Pagination extends AbstractModel{
+public class Pagination extends AbstractModel {
     private final String previousUrl;
     private final String nextUrl;
     private final List<PageItem> pages;
@@ -15,23 +15,27 @@ public class Pagination extends AbstractModel{
         this.pages = pages;
     }
 
-    public boolean isPrevious(){
+    public boolean isPrevious() {
         return previousUrl != null;
     }
-    public boolean isNext(){
+
+    public boolean isNext() {
         return nextUrl != null;
     }
-    public List<PageItem> getPages(){
+
+    public List<PageItem> getPages() {
         return pages;
     }
-    public String getPreviousUrl(){
+
+    public String getPreviousUrl() {
         return previousUrl;
     }
-    public String getNextUrl(){
+
+    public String getNextUrl() {
         return nextUrl;
     }
 
-    public static final class PageItem extends AbstractModel{
+    public static final class PageItem extends AbstractModel {
         private final String url;
         private final String caption;
 
@@ -43,31 +47,38 @@ public class Pagination extends AbstractModel{
         public String getUrl() {
             return url;
         }
+
         public String getCaption() {
             return caption;
         }
-        public boolean isEllipsis(){
+
+        public boolean isEllipsis() {
             return url == null && caption == null;
         }
-        public boolean isCurrent(){
+
+        public boolean isCurrent() {
             return url == null && caption != null;
         }
-        public boolean isPageItem(){
+
+        public boolean isPageItem() {
             return url != null && caption != null;
         }
 
-        private static PageItem createCurrent(String caption){
+        private static PageItem createCurrent(String caption) {
             return new PageItem(null, caption);
         }
-        private static PageItem createEllipsis(){
+
+        private static PageItem createEllipsis() {
             return new PageItem(null, null);
         }
-        private static PageItem createPageItems(String url, String caption){
+
+        private static PageItem createPageItems(String url, String caption) {
             return new PageItem(url, caption);
         }
 
     }
-    public static class Builder extends AbstractModel{
+
+    public static class Builder extends AbstractModel {
         private static final int DEFAULT_MAX_PAGINATION_BUTTONS_PER_PAGE = 9;
         private static final int DEFAULT_LIMIT_ITEMS_PER_PAGE = 12;
         private String baseUrl;
@@ -85,72 +96,75 @@ public class Pagination extends AbstractModel{
             this.maxPaginationButtonsPerPage = DEFAULT_MAX_PAGINATION_BUTTONS_PER_PAGE;
         }
 
-        public Builder withLimit(int limit){
+        public Builder withLimit(int limit) {
             this.limit = limit;
             return this;
         }
 
-        public Builder withMaxPaginationButtonsPerPage(int maxPaginationButtonsPerPage){
-            this.maxPaginationButtonsPerPage = maxPaginationButtonsPerPage;
-            return this;
-        }
-
-        private List<PageItem> createPageItems(int currentPage, int minPage, int maxPage){
+        private List<PageItem> createPageItems(int currentPage, int minPage, int maxPage) {
             List<PageItem> pages = new ArrayList<>();
-            for(int page = minPage; page <= maxPage; page++){
-                if(currentPage == page){
+            for (int page = minPage; page <= maxPage; page++) {
+                if (currentPage == page) {
                     pages.add(PageItem.createCurrent(String.valueOf(page)));
-                }else{
-                    pages.add(PageItem.createPageItems(createUrlForPage(page),String.valueOf(page)));
+                } else {
+                    pages.add(PageItem.createPageItems(createUrlForPage(page), String.valueOf(page)));
                 }
             }
             return pages;
         }
-        private String createUrlForPage(int page){
-            if(page > 1){
+
+        private String createUrlForPage(int page) {
+            if (page > 1) {
                 return baseUrl + "page=" + page;
-            }else{
-                return baseUrl.substring(0, baseUrl.length() -1);
+            } else {
+                return baseUrl.substring(0, baseUrl.length() - 1);
             }
         }
-        private String getPreviousUrl(int currentPage){
-            if(currentPage > 1){
+
+        private String getPreviousUrl(int currentPage) {
+            if (currentPage > 1) {
                 return baseUrl + "page=" + (currentPage - 1);
-            }else{
+            } else {
                 return null;
             }
         }
-        private String getNextUrl(int currentPage){
-            if(offset + limit < count){
+
+        private String getNextUrl(int currentPage) {
+            if (offset + limit < count) {
                 return baseUrl + "page=" + (currentPage + 1);
-            }else{
+            } else {
                 return null;
             }
         }
-        private int getMaxPage(){
+
+        private int getMaxPage() {
             int maxPage = count / limit;
-            if(count % limit > 0) {
+            if (count % limit > 0) {
                 maxPage++;
             }
             return maxPage;
         }
-        private List<PageItem> createButtonsOnly(int currentPage, int maxPage){
+
+        private List<PageItem> createButtonsOnly(int currentPage, int maxPage) {
             return createPageItems(currentPage, 1, maxPage);
         }
-        private List<PageItem> createButtonsWithLastPageOnly(int currentPage, int maxPage){
+
+        private List<PageItem> createButtonsWithLastPageOnly(int currentPage, int maxPage) {
             List<PageItem> pages = createPageItems(currentPage, 1, maxPaginationButtonsPerPage - 2);
             pages.add(PageItem.createEllipsis());
-            pages.add(PageItem.createPageItems(createUrlForPage(maxPage),String.valueOf(maxPage)));
+            pages.add(PageItem.createPageItems(createUrlForPage(maxPage), String.valueOf(maxPage)));
             return pages;
         }
-        private List<PageItem> createButtonsWithFirstPageOnly(int currentPage, int maxPage){
+
+        private List<PageItem> createButtonsWithFirstPageOnly(int currentPage, int maxPage) {
             List<PageItem> pages = new ArrayList<>();
             pages.add(PageItem.createPageItems(createUrlForPage(1), "1"));
             pages.add(PageItem.createEllipsis());
             pages.addAll(createPageItems(currentPage, maxPage - (maxPaginationButtonsPerPage - 3), maxPage));
             return pages;
         }
-        private List<PageItem> createButtonsWithMiddlePages(int currentPage, int maxPage){
+
+        private List<PageItem> createButtonsWithMiddlePages(int currentPage, int maxPage) {
             int shiftValue = (maxPaginationButtonsPerPage - 5) / 2;
             List<PageItem> pages = new ArrayList<>();
             pages.add(PageItem.createPageItems(createUrlForPage(1), "1"));
@@ -161,8 +175,8 @@ public class Pagination extends AbstractModel{
             return pages;
         }
 
-        public Pagination build(){
-            if(count <= limit){
+        public Pagination build() {
+            if (count <= limit) {
                 return null;
             }
             int currentPage = offset / limit + 1;
@@ -170,21 +184,20 @@ public class Pagination extends AbstractModel{
             String nextUrl = getNextUrl(currentPage);
             int maxPage = getMaxPage();
             List<PageItem> pages;
-            if(maxPage < maxPaginationButtonsPerPage){
+            if (maxPage < maxPaginationButtonsPerPage) {
                 pages = createButtonsOnly(currentPage, maxPage);
-            }else{
+            } else {
                 int borderValue = (maxPaginationButtonsPerPage - 1) / 2;
-                if(currentPage < (maxPaginationButtonsPerPage - borderValue)){
+                if (currentPage < (maxPaginationButtonsPerPage - borderValue)) {
                     pages = createButtonsWithLastPageOnly(currentPage, maxPage);
-                }else if (currentPage > maxPage - (maxPaginationButtonsPerPage - borderValue)){
+                } else if (currentPage > maxPage - (maxPaginationButtonsPerPage - borderValue)) {
                     pages = createButtonsWithFirstPageOnly(currentPage, maxPage);
-                }else {
+                } else {
                     pages = createButtonsWithMiddlePages(currentPage, maxPage);
                 }
             }
             return new Pagination(previousUrl, nextUrl, pages);
         }
-
 
 
     }

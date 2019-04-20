@@ -4,6 +4,7 @@ import model.dao.AccountDao;
 import model.dao.mapper.AccountMapper;
 import model.entity.Account;
 import model.entity.enums.Role;
+
 import java.sql.*;
 import java.util.*;
 
@@ -11,7 +12,9 @@ public class JDBCAccountFactory implements AccountDao {
 
     private Connection connection;
     private static final String SQL_INSERT = "INSERT INTO account (firstNameUk,surNameUk,firstNameUa,surNameUa,role,password, email, phone) VALUES(?,?,?,?,?,?,?,?)";
-    private static final String SQL2="SELECT *  FROM account_has_request RIGHT JOIN  account ON account.email = account_has_request.emailaccount WHERE role=? group by emailaccount ORDER BY count(emailaccount) asc" ;
+    private static final String SQL_ACC_WITH_MIN_REC = "SELECT *  FROM account_has_request RIGHT JOIN  account ON account.email = account_has_request.emailaccount WHERE role=? group by emailaccount ORDER BY count(emailaccount) asc";
+    private static final String SQL_FIND_BY_EMAIL = "SELECT * FROM account WHERE email = ?";
+    private static final String SQL_FIND_ALL = "select * from account";
 
     JDBCAccountFactory(Connection connection) {
 
@@ -20,7 +23,7 @@ public class JDBCAccountFactory implements AccountDao {
 
     @Override
     public Account create(Account entity) {
-        try(PreparedStatement preparedStatement = connection.prepareStatement(SQL_INSERT)) {
+        try (PreparedStatement preparedStatement = connection.prepareStatement(SQL_INSERT)) {
             preparedStatement.setString(1, entity.getNameUk());
             preparedStatement.setString(2, entity.getSurnameUk());
             preparedStatement.setString(3, entity.getNameUa());
@@ -35,25 +38,24 @@ public class JDBCAccountFactory implements AccountDao {
             e.printStackTrace();
         }
 
-    return entity;
+        return entity;
     }
 
     @Override
     public Optional<Account> findAccountWithMinRequests(Role role) {
 
         Optional<Account> result = Optional.empty();
-        try(PreparedStatement ps = connection.prepareCall(SQL2)) {
+        try (PreparedStatement ps = connection.prepareCall(SQL_ACC_WITH_MIN_REC)) {
 
             ps.setString(1, role.name());
             ResultSet rs = ps.executeQuery();
-
 
             AccountMapper userMapper = new AccountMapper();
 
             if (rs.next()) {
                 result = Optional.ofNullable(userMapper.extractFromResultSet(rs));
             }
-        return result;
+            return result;
         } catch (SQLException e) {
             e.printStackTrace();
             return Optional.empty();
@@ -70,15 +72,13 @@ public class JDBCAccountFactory implements AccountDao {
     public List<Account> findAll() {
         Map<Integer, Account> accounts = new HashMap<>();
 
-        final String query = "select * from account";
+        try (Statement st = connection.createStatement()) {
 
-        try(Statement st = connection.createStatement()){
-
-            ResultSet rs = st.executeQuery(query);
+            ResultSet rs = st.executeQuery(SQL_FIND_ALL);
 
             AccountMapper accountMapper = new AccountMapper();
 
-            while(rs.next()) {
+            while (rs.next()) {
                 Account account = accountMapper.extractFromResultSet(rs);
                 accountMapper.makeUnique(accounts, account);
             }
@@ -90,8 +90,6 @@ public class JDBCAccountFactory implements AccountDao {
             return null;
         }
     }
-
-
 
     @Override
     public void update(Account user) {
@@ -106,28 +104,18 @@ public class JDBCAccountFactory implements AccountDao {
     @Override
     public Optional<Account> findByEmail(String email) {
         Optional<Account> result = Optional.empty();
-
-        String query = "SELECT * FROM account WHERE email = ?";
-
-        try(PreparedStatement ps = connection.prepareCall(query)) {
-
+        try (PreparedStatement ps = connection.prepareCall(SQL_FIND_BY_EMAIL)) {
             ps.setString(1, email);
             ResultSet rs = ps.executeQuery();
-
-
             AccountMapper userMapper = new AccountMapper();
-
             if (rs.next()) {
                 result = Optional.of(userMapper.extractFromResultSet(rs));
             }
-
         } catch (SQLException e) {
             e.printStackTrace();
         }
-
         return result;
     }
-
 
 
     @Override

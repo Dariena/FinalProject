@@ -4,13 +4,15 @@ import model.dao.RequestDao;
 import model.dao.mapper.RequestMapper;
 import model.entity.Account;
 import model.entity.Request;
-import model.entity.enums.State;
 
 import java.sql.*;
 import java.util.*;
 
 public class JDBCRequestFactory implements RequestDao {
     private static final String SQL_INSERT = "INSERT INTO request (content,date,comment,accepted) values(?,?,?,?)";
+    private static final String SQL_FIND = "SELECT request_idrequest FROM account_has_request WHERE emailaccount = ?";
+    private static final String SQL_FIND_ALL = "select * from request";
+    private static final String SQL_FIND_BY_ID = "select * from request where idrequest = ?";
     private static final String SQL_INSERT_REQ = "INSERT INTO account_has_request (emailaccount,request_idrequest) values(?,?),(?,?)";
     private static final String SQL_INSERT_MASTER = "INSERT INTO account_has_request (emailaccount,request_idrequest) values(?,?)";
     private static final String SQL_UPDATE = "UPDATE request SET comment = ?, accepted = ? WHERE idrequest = ?";
@@ -18,12 +20,13 @@ public class JDBCRequestFactory implements RequestDao {
     private static final String SQL_FIND_LIMIT_CONFERENCE =
             "SELECT * FROM account_has_request accreq " +
                     "LEFT JOIN request req ON accreq.request_idrequest = req.idrequest " +
-                    "WHERE emailaccount = ? AND accepted in (%s) LIMIT ? OFFSET ?";
+                    "WHERE accepted in (%s) AND emailaccount = ? LIMIT ? OFFSET ?";
 
     private static final String SQL_GET_SIZE = "SELECT COUNT(*) FROM account_has_request accreq " +
             "LEFT JOIN request req ON accreq.request_idrequest = req.idrequest " +
-            "WHERE emailaccount = ? AND accepted in (%s)";
+            "WHERE accepted in (%s) AND emailaccount = ?";
     private static final String SQL_DELETE_REQUEST = "DELETE from request where idrequest =?";
+
     private Connection connection;
 
     JDBCRequestFactory(Connection connection) {
@@ -46,6 +49,7 @@ public class JDBCRequestFactory implements RequestDao {
             int requestId = 0;
             if (resultSet.next())
                 requestId = resultSet.getInt(1);
+
             PreparedStatement statement = connection.prepareStatement(SQL_INSERT_REQ);
             statement.setString(1, account.getEmail());
             statement.setInt(2, requestId);
@@ -63,19 +67,18 @@ public class JDBCRequestFactory implements RequestDao {
     @Override
     public List<Request> find(String email) {
         List<Request> requests = new ArrayList<>();
-        List<Integer> list = new ArrayList<>();
-        String query = "SELECT request_idrequest FROM account_has_request WHERE emailaccount = ?";
+        List<Integer> reqIdList = new ArrayList<>();
 
-        try (PreparedStatement ps = connection.prepareCall(query)) {
+        try (PreparedStatement ps = connection.prepareCall(SQL_FIND)) {
 
             ps.setString(1, email);
             ResultSet rs = ps.executeQuery();
 
             while (rs.next()) {
-                list.add(rs.getInt(1));
+                reqIdList.add(rs.getInt(1));
             }
-            for (Integer list1 : list) {
-                requests.add(findById(list1));
+            for (Integer recId : reqIdList) {
+                requests.add(findById(recId));
             }
             return requests;
         } catch (SQLException e) {
@@ -94,8 +97,7 @@ public class JDBCRequestFactory implements RequestDao {
     @Override
     public Request findById(int id) {
         Request request = new Request();
-        final String query = "select * from request where idrequest = ?";
-        try (PreparedStatement st = connection.prepareCall(query)) {
+        try (PreparedStatement st = connection.prepareCall(SQL_FIND_BY_ID)) {
             st.setInt(1, id);
             ResultSet rs = st.executeQuery();
 
@@ -119,12 +121,9 @@ public class JDBCRequestFactory implements RequestDao {
     public List<Request> findAll() {
         Map<Integer, Request> requests = new HashMap<>();
 
-        final String query = "select * from request";
-
         try (Statement st = connection.createStatement()) {
 
-            ResultSet rs = st.executeQuery(query);
-
+            ResultSet rs = st.executeQuery(SQL_FIND_ALL);
 
             RequestMapper requestMapper = new RequestMapper();
 
@@ -146,10 +145,10 @@ public class JDBCRequestFactory implements RequestDao {
         int result = 0;
         String query = String.format(SQL_GET_SIZE, preparePlaceHolders(states.size()));
         try (PreparedStatement st = connection.prepareCall(query)) {
-            st.setString(1, email);
-            for (int i = 2; i < states.size() + 2; i++) {
-                st.setString(i, states.get(i - 2));
+            for (int i = 1; i <= states.size(); i++) {
+                st.setString(i, states.get(i - 1));
             }
+            st.setString(states.size() + 1, email);
             ResultSet rs = st.executeQuery();
 
             if (rs.next()) {
@@ -205,10 +204,10 @@ public class JDBCRequestFactory implements RequestDao {
         List<Request> result = new ArrayList<>();
         String query = String.format(SQL_FIND_LIMIT_CONFERENCE, preparePlaceHolders(states.size()));
         try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
-            preparedStatement.setString(1, account.getEmail());
-            for (int i = 2; i <= states.size() + 1; i++) {
-                preparedStatement.setString(i, states.get(i - 2));
+            for (int i = 1; i <= states.size(); i++) {
+                preparedStatement.setString(i, states.get(i - 1));
             }
+            preparedStatement.setString(states.size() + 1, account.getEmail());
             preparedStatement.setInt(states.size() + 2, limit);
             preparedStatement.setInt(states.size() + 3, offset);
             ResultSet resultSet = preparedStatement.executeQuery();
@@ -224,7 +223,7 @@ public class JDBCRequestFactory implements RequestDao {
         return null;
     }
 
-    public static String preparePlaceHolders(int length) {
+    private String preparePlaceHolders(int length) {
         return String.join(",", Collections.nCopies(length, "?"));
     }
 

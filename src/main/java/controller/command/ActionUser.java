@@ -34,23 +34,6 @@ public class ActionUser extends AbstractController implements Command {
                 State.REJECTED.name()
         ));
         return "/WEB-INF/user/action.jsp";
-       // String content = request.getParameter("content");
-     /*   Date date = new Date(System.currentTimeMillis());
-        Request req = new Request(content, date, State.UNREAD, "");
-
-        if (content == null) {
-            LOGGER.debug("Request content is null");
-            setPagination(request, "*");
-            return "/WEB-INF/user/action.jsp";
-        }*/
-
-      //  requestService.create(req, userService.getCurrentAccount(request));
-      //  LOGGER.info("Request was successfully created");
-
-      //  setPagination(request, "*");
-      //  return "/WEB-INF/user/action.jsp";
-
-
     }
 
 }

@@ -15,7 +15,7 @@ public class JDBCReviewFactory implements ReviewDao {
 
     private Connection connection;
     private static final String SQL_INSERT = "INSERT INTO review (content,date, account_email) values(?,?,?)";
-
+    private static final String SQL_FIND_ALL = "select * from review";
 
     public JDBCReviewFactory(Connection connection) {
         this.connection = connection;
@@ -57,22 +57,12 @@ public class JDBCReviewFactory implements ReviewDao {
 
     @Override
     public List<Review> findAll() {
-        Map<Integer, Review> reviews = new HashMap<>();
 
-        final String query = "select * from review";
+        Map<Integer, Review> reviews = new HashMap<>();
 
         try(Statement st = connection.createStatement()){
 
-            ResultSet rs = st.executeQuery(query);
-
-            ReviewMapper reviewMapper = new ReviewMapper();
-
-            while(rs.next()) {
-                Review review = reviewMapper.extractFromResultSet(rs);
-                reviewMapper.makeUnique(reviews, review);
-            }
-
-            return new ArrayList<>(reviews.values());
+            return getReviewsByMapper(reviews, st.executeQuery(SQL_FIND_ALL));
 
         } catch (SQLException e) {
             e.printStackTrace();
@@ -80,33 +70,19 @@ public class JDBCReviewFactory implements ReviewDao {
         }
     }
 
+    private List<Review> getReviewsByMapper(Map<Integer, Review> reviews, ResultSet rs) throws SQLException {
 
-    @Override
-    public List<Review> getLatestReview() {
+        ReviewMapper reviewMapper = new ReviewMapper();
 
-        Map<Integer, Review> reviews = new HashMap<>();
-
-        final String query = "select * from review order by date";
-
-        try(Statement st = connection.createStatement()){
-
-            ResultSet rs = st.executeQuery(query);
-
-            ReviewMapper reviewMapper = new ReviewMapper();
-
-            while (rs.next()){
-                Review review = reviewMapper.extractFromResultSet(rs);
-                reviewMapper.makeUnique(reviews, review);
-            }
-
-            return new ArrayList<>(reviews.values());
-
-        } catch (SQLException e) {
-            e.printStackTrace();
+        while(rs.next()) {
+            Review review = reviewMapper.extractFromResultSet(rs);
+            reviewMapper.makeUnique(reviews, review);
         }
 
-        return null;
+        return new ArrayList<>(reviews.values());
     }
+
+
 
     @Override
     public void update(Review reviews) {

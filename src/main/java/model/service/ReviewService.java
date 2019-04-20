@@ -11,7 +11,7 @@ import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 public class ReviewService {
-    DaoFactory daoFactory = DaoFactory.getInstance();
+    private DaoFactory daoFactory = DaoFactory.getInstance();
 
     public Review create(Review review, Account account) {
         Review result;
@@ -37,9 +37,4 @@ public class ReviewService {
 
         return result;
     }
-    /*public List<Review> (){
-        try (ReviewDao dao = daoFactory.createReviewDao()){
-            return dao.getLatestReview();
-        }
-    }*/
 }

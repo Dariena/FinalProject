@@ -5,9 +5,9 @@ import javax.servlet.http.HttpServletRequest;
 public class User extends AbstractController implements Command {
     @Override
     public String execute(HttpServletRequest request) {
+        String result = "/login.jsp";
         if (request.getSession().getAttributeNames().hasMoreElements())
-            return "/WEB-INF/user/login.jsp";
-        else
-            return "/login.jsp";
+            result = "/WEB-INF/user/login.jsp";
+        return result;
     }
 }

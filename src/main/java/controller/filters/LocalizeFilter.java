@@ -11,7 +11,6 @@ import java.util.ResourceBundle;
 public class LocalizeFilter implements Filter {
     private static final Logger LOGGER = Logger.getLogger(LocalizeFilter.class);
 
-
     @Override
     public void init(FilterConfig filterConfig) throws ServletException {
     }
@@ -21,7 +20,6 @@ public class LocalizeFilter implements Filter {
         setLangBundle(servletRequest);
         LOGGER.info("Localize Filter is successfully");
         filterChain.doFilter(servletRequest, servletResponse);
-
     }
 
     @Override

@@ -1,8 +1,8 @@
 package model.dao.impl;
 
+import model.dao.AccountDao;
 import model.dao.DaoFactory;
 import model.dao.RequestDao;
-import model.dao.AccountDao;
 import model.dao.ReviewDao;
 
 import javax.sql.DataSource;
@@ -13,9 +13,8 @@ public class JDBCDaoFactory extends DaoFactory {
 
     private DataSource dataSource = ConnectionPoolHolder.getDataSource();
 
-
     private Connection getConnection() {
-        try{
+        try {
             return dataSource.getConnection();
         } catch (SQLException e) {
             throw new RuntimeException(e);

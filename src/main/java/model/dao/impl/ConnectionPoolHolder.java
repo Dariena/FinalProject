@@ -23,10 +23,8 @@ public class ConnectionPoolHolder {
                         properties.load(new FileInputStream(
                                 "/Users/dasha/Documents/Learning/Java/FinalProject/src/main/resources/db.properties"));
 
-
                         Class.forName(properties.getProperty("db.connection.driver"));
                         BasicDataSource ds = new BasicDataSource();
-                        //ds.set
                         ds.setUrl(properties.getProperty("db.connection.url"));
                         ds.setUsername(properties.getProperty("db.connection.username"));
                         ds.setPassword(properties.getProperty("db.connection.password"));

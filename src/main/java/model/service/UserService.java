@@ -3,13 +3,14 @@ package model.service;
 import model.dao.AccountDao;
 import model.dao.DaoFactory;
 import model.entity.Account;
+
 import javax.servlet.http.HttpServletRequest;
 import java.util.Optional;
 
 public class UserService {
 
 
-   private DaoFactory daoFactory = DaoFactory.getInstance();
+    private DaoFactory daoFactory = DaoFactory.getInstance();
 
     public Optional<Account> login(String email) {
         Optional<Account> result;
@@ -20,6 +21,7 @@ public class UserService {
 
         return result;
     }
+
     public Account create(Account account) {
         Account result;
 
@@ -48,8 +50,7 @@ public class UserService {
     }
 
 
-
-    public boolean validateData(Account account){
+    public boolean validateData(Account account) {
 
         return true;
     }
