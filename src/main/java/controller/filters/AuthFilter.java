@@ -42,7 +42,7 @@ public class AuthFilter implements Filter {
 
         if (canAuthenticate(account, password)) {
             LOGGER.info("Authentication is successfully");
-            loginOrError(request, response, account.get().getEmail());
+            loginOrError(request, response, account.get());
             setAuthAttributesToSession(request.getSession(),account.get());
             goTo(request, response, account.get().getRole());
         }
@@ -62,9 +62,9 @@ public class AuthFilter implements Filter {
 
     }
 
-    private void loginOrError(HttpServletRequest request, HttpServletResponse response, String email)
+    private void loginOrError(HttpServletRequest request, HttpServletResponse response, Account account)
             throws ServletException, IOException {
-        if (CommandUtility.cannotLogUser(request, email)) {
+        if (CommandUtility.cannotLogUser(request, account)) {
             LOGGER.error("Cannot log in, forwarding to jsp");
             request.getRequestDispatcher("/WEB-INF/error.jsp").forward(request, response);
         }
