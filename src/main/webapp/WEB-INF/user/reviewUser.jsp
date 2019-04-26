@@ -11,23 +11,68 @@
 <head>
     <title>Review</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/2.3.1/css/bootstrap.min.css">
-</head>
+    <style>
+        .margin {
+            margin-top: 5%;
+        }
 
+        table {
+            counter-reset: rowNumber;
+        }
+
+        table tbody tr {
+            counter-increment: rowNumber;
+        }
+
+        table tbody tr td:first-child::before {
+            content: counter(rowNumber);
+            min-width: 1em;
+            margin-right: 0.5em;
+        }
+
+        form{
+            margin-top: 5%;
+        }
+    </style>
+</head>
 <body>
 <jsp:include page="../views/header_nlogout.jsp"/>
-<form class="navbar-form pull-left" method="post" action="${pageContext.request.contextPath}/app/reviewUser">
-    <input class="span2" name="content" id="content" type="text" placeholder="" required>
-    <button type="submit" class="btn" value="Request">Create</button>
 
-</form>
-<div>
-    <c:forEach var="review" items="${sessionScope.review}">
-        <ul>
-            <li>Content: <c:out value="${review.content}"/></li>
-            <li>Date: <c:out value="${review.date}"/></li>
-            <li>User`s email: <c:out value="${review.email}"/></li>
-        </ul>
-    </c:forEach>
+<div class="container">
+    <form style="margin-top: 5%" class="navbar-form" method="post" action="${pageContext.request.contextPath}/app/reviewUser">
+        <input style="height: 31px; width: 50%; margin-top: -1px" name="content" id="content" type="text" placeholder="" required>
+        <button type="submit" class="btn" value="create" name="create">Create</button>
+    </form>
+
+    <div class="row margin">
+        <table class="table table-hover">
+            <thead>
+            <tr>
+                <th>#</th>
+                <th>Content</th>
+                <th>Date</th>
+                <th>Email</th>
+            </tr>
+            </thead>
+            <tbody>
+            <c:forEach var="review" items="${sessionScope.review}">
+                <tr>
+                    <td></td>
+                    <td>
+                        <div class="col-md-6 mb-3"><c:out value="${review.content}"/></div>
+                    </td>
+                    <td>
+                        <div class="col-md-6 mb-3"><c:out value="${review.date}"/></div>
+                    </td>
+                    <td>
+                        <div class="col-md-6 mb-3"><c:out value="${review.email}"/></div>
+                    </td>
+                </tr>
+            </c:forEach>
+            </tbody>
+        </table>
+    </div>
+
 </div>
 </body>
 </html>
