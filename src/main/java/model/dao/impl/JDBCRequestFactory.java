@@ -7,6 +7,7 @@ import model.entity.Request;
 
 import java.sql.*;
 import java.util.*;
+import java.util.stream.IntStream;
 
 public class JDBCRequestFactory implements RequestDao {
     private static final String SQL_INSERT = "INSERT INTO request (content,date,comment,accepted) values(?,?,?,?)";
@@ -144,9 +145,10 @@ public class JDBCRequestFactory implements RequestDao {
         int result = 0;
         String query = String.format(SQL_GET_SIZE, preparePlaceHolders(states.size()));
         try (PreparedStatement st = connection.prepareCall(query)) {
-            for (int i = 1; i <= states.size(); i++) {
+            /*for (int i = 1; i <= states.size(); i++) {
                 st.setString(i, states.get(i - 1));
-            }
+            }*/
+            findInRange(st,states);
             st.setString(states.size() + 1, email);
             ResultSet rs = st.executeQuery();
 
@@ -203,9 +205,12 @@ public class JDBCRequestFactory implements RequestDao {
         List<Request> result = new ArrayList<>();
         String query = String.format(SQL_FIND_LIMIT_CONFERENCE, preparePlaceHolders(states.size()));
         try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
-            for (int i = 1; i <= states.size(); i++) {
-                preparedStatement.setString(i, states.get(i - 1));
-            }
+
+            /*for (int i = 1; i <= states.size(); i++) {
+                preparedStatement.setString(i, states.get(i-1));
+
+            }*/
+            findInRange(preparedStatement,states);
             preparedStatement.setString(states.size() + 1, account.getEmail());
             preparedStatement.setInt(states.size() + 2, limit);
             preparedStatement.setInt(states.size() + 3, offset);
@@ -237,6 +242,16 @@ public class JDBCRequestFactory implements RequestDao {
 
         }
 
+    }
+
+    private void findInRange(PreparedStatement st, List<String> state){
+        IntStream.rangeClosed(1,state.size()).forEach(i-> {
+            try {
+                st.setString(i, state.get(i-1));
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        });
     }
 
     @Override
