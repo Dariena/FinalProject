@@ -54,8 +54,7 @@ public class JDBCRequestFactory implements RequestDao {
             statement.setString(1, account.getEmail());
             statement.setInt(2, requestId);
             statement.setString(3, managerAccount.getEmail());
-            statement.setInt(4, requestId);
-            statement.execute();
+            statement.setInt(4, requestId);statement.execute();
             connection.commit();
         } catch (SQLException e) {
             e.printStackTrace();

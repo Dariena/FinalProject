@@ -46,7 +46,7 @@ public class AuthFilter implements Filter {
             setAuthAttributesToSession(request.getSession(),account.get());
             goTo(request, response, account.get().getRole());
         }
-        LOGGER.info("Authorization is successfully");
+
         filterChain.doFilter(servletRequest, servletResponse);
 
     }
@@ -59,6 +59,7 @@ public class AuthFilter implements Filter {
     private void setAuthAttributesToSession(HttpSession session, Account account) {
         session.setAttribute("role", account.getRole().name());
         session.setAttribute("email", account.getEmail());
+        LOGGER.info("Authorization is successfully");
 
     }
 

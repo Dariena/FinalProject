@@ -18,8 +18,8 @@ public class LocalizeFilter implements Filter {
     @Override
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
         setLangBundle(servletRequest);
-        LOGGER.info("Localize Filter is successfully");
         filterChain.doFilter(servletRequest, servletResponse);
+        LOGGER.info("Localize Filter is successfully");
     }
 
     @Override

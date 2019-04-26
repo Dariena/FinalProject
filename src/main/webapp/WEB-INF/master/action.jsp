@@ -60,7 +60,7 @@
 
 </head>
 <body>
-<jsp:include page="../views/header_nlogout.jsp"/>
+<jsp:include page="../views/header_nlogoutmaster.jsp"/>
 <h1>Request for master</h1>
 
 <div class="container">

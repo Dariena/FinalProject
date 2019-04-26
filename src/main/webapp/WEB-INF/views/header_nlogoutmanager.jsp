@@ -46,14 +46,14 @@
                 <a class="brand" href="${pageContext.request.contextPath}/app/home">${requestScope.langBundle.getString("YOUR_REPAIRS")}</a>
                 <div class="nav-collapse collapse">
                     <ul class="nav">
-                        <li><a href="${pageContext.request.contextPath}/app/reviewUser">${requestScope.langBundle.getString("REVIEWS")}</a></li>
+                        <li><a href="${pageContext.request.contextPath}/app/reviewAll">${requestScope.langBundle.getString("REVIEWS")}</a></li>
                         <li class="dropdown">
                             <a href="#" class="dropdown-toggle" data-toggle="dropdown">${requestScope.langBundle.getString("LANGUAGE")} <b class="caret"></b></a>
                             <ul class="dropdown-menu">
 
-                                <li><a type="submit" href="${pageContext.request.contextPath}/app/action?lang=uk_ua">${requestScope.langBundle.getString("UA")}</a></li>
+                                <li><a type="submit" href="${pageContext.request.contextPath}/app/actionManager?lang=uk_ua">${requestScope.langBundle.getString("UA")}</a></li>
                                 <li class="divider"></li>
-                                <li><a type="submit" href="${pageContext.request.contextPath}/app/action?lang=en_uk">${requestScope.langBundle.getString("EN")}</a></li>
+                                <li><a type="submit" href="${pageContext.request.contextPath}/app/actionManager?lang=en_uk">${requestScope.langBundle.getString("EN")}</a></li>
 
                             </ul>
 

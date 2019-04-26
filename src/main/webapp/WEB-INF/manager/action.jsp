@@ -116,7 +116,7 @@
 </head>
 <body>
 <p>Request for manager</p>
-<jsp:include page="../views/header_nlogout.jsp"/>
+<jsp:include page="../views/header_nlogoutmanager.jsp"/>
 
 <div class="container">
     <div class="row margin">

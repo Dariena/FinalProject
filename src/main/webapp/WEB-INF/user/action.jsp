@@ -51,11 +51,11 @@
             <ul class="dropdown-menu">
 
                 <li><a type="submit"
-                       href="${pageContext.request.contextPath}/app/home?lang=uk_ua">${requestScope.langBundle.getString("UA")}</a>
+                       href="${pageContext.request.contextPath}/app/action?lang=uk_ua">${requestScope.langBundle.getString("UA")}</a>
                 </li>
                 <li class="divider"></li>
                 <li><a type="submit"
-                       href="${pageContext.request.contextPath}/app/home?lang=en_uk">${requestScope.langBundle.getString("EN")}</a>
+                       href="${pageContext.request.contextPath}/app/action?lang=en_uk">${requestScope.langBundle.getString("EN")}</a>
                 </li>
             </ul>
         </li>
