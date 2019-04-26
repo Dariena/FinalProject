@@ -4,15 +4,13 @@ import org.apache.commons.dbcp2.BasicDataSource;
 
 import javax.sql.DataSource;
 import java.io.*;
-import java.net.URISyntaxException;
-import java.nio.file.Paths;
 import java.util.Properties;
 
-public class ConnectionPoolHolder {
+ class ConnectionPoolHolder {
 
     private static volatile DataSource dataSource;
 
-    public static DataSource getDataSource() {
+     static DataSource getDataSource() {
         if (dataSource == null) {
             synchronized (ConnectionPoolHolder.class) {
                 if (dataSource == null) {

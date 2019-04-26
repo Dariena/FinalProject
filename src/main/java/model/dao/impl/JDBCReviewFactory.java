@@ -4,7 +4,6 @@ import model.dao.ReviewDao;
 import model.dao.mapper.ReviewMapper;
 import model.entity.Account;
 import model.entity.Review;
-
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -17,7 +16,7 @@ public class JDBCReviewFactory implements ReviewDao {
     private static final String SQL_INSERT = "INSERT INTO review (content,date, account_email) values(?,?,?)";
     private static final String SQL_FIND_ALL = "select * from review";
 
-    public JDBCReviewFactory(Connection connection) {
+    JDBCReviewFactory(Connection connection) {
         this.connection = connection;
     }
 

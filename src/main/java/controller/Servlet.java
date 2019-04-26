@@ -1,10 +1,19 @@
 package controller;
-
-import controller.command.*;
+import controller.command.Command;
+import controller.command.ActionManager;
+import controller.command.ActionMaster;
+import controller.command.ActionUser;
+import controller.command.Home;
+import controller.command.Logout;
+import controller.command.Manager;
+import controller.command.Master;
+import controller.command.Registration;
+import controller.command.ReviewAll;
+import controller.command.ReviewUser;
+import controller.command.User;
 import controller.filters.AuthFilter;
 import model.service.UserService;
 import org.apache.log4j.Logger;
-
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -68,7 +77,6 @@ public class Servlet extends HttpServlet {
         Optional<Command> command = Optional.ofNullable(commands.get(path));
         if (command.isPresent()) {
             result = command.get().execute(req);
-
         }
         LOGGER.debug("Page is " + result);
         return result;

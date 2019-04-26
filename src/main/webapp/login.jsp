@@ -138,9 +138,9 @@
                 </div>
             </div>
             <div class="item">
-                <img src="${pageContext.request.contextPath}/static/img/tool-1957451_1280.jpg" alt="">
+                <img src="${pageContext.request.contextPath}/static/img/tools-690038_1280.jpg" alt="">
                 <div class="container">
-                    <div class="carousel-caption">
+                    <div style="background-color:rgba(218, 218, 218, 0.7); padding-bottom: 10px;" class="carousel-caption">
                         <h1>Another example headline.</h1>
                         <p class="lead">Cras justo odio, dapibus ac facilisis in, egestas eget quam. Donec id elit non mi porta gravida at eget metus. Nullam id dolor id nibh ultricies vehicula ut id elit.</p>
                         <a class="btn btn-large btn-primary" href="#">Learn more</a>
@@ -148,9 +148,9 @@
                 </div>
             </div>
             <div class="item">
-                <img src="${pageContext.request.contextPath}/static/img/tool-1957451_1280.jpg" alt="">
+                <img src="${pageContext.request.contextPath}/static/img/tool-2820946_1280.jpg" alt="">
                 <div class="container">
-                    <div class="carousel-caption">
+                    <div style="background-color:rgba(218, 218, 218, 0.7); padding-bottom: 10px;" class="carousel-caption">
                         <h1>One more for good measure.</h1>
                         <p class="lead">Cras justo odio, dapibus ac facilisis in, egestas eget quam. Donec id elit non mi porta gravida at eget metus. Nullam id dolor id nibh ultricies vehicula ut id elit.</p>
                         <a class="btn btn-large btn-primary" href="#">Browse gallery</a>

@@ -4,7 +4,6 @@ import model.dao.RequestDao;
 import model.dao.mapper.RequestMapper;
 import model.entity.Account;
 import model.entity.Request;
-
 import java.sql.*;
 import java.util.*;
 import java.util.stream.IntStream;
@@ -48,9 +47,9 @@ public class JDBCRequestFactory implements RequestDao {
             preparedStatement.execute();
             ResultSet resultSet = preparedStatement.getGeneratedKeys();
             int requestId = 0;
-            if (resultSet.next())
+            if (resultSet.next()) {
                 requestId = resultSet.getInt(1);
-
+            }
             PreparedStatement statement = connection.prepareStatement(SQL_INSERT_REQ);
             statement.setString(1, account.getEmail());
             statement.setInt(2, requestId);
