@@ -2,9 +2,11 @@ package model.service;
 
 import model.dao.AccountDao;
 import model.dao.DaoFactory;
+import model.dao.RequestDao;
 import model.entity.Account;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.List;
 import java.util.Optional;
 
 public class UserService {
@@ -53,6 +55,15 @@ public class UserService {
     public boolean validateData(Account account) {
 
         return true;
+    }
+    public List<String> findByIdEmail(int id) {
+        List<String> email;
+
+        try (AccountDao accountDao = daoFactory.createAccountDao()) {
+            email = accountDao.findByIdEmail(id);
+        }
+
+        return email;
     }
 
 

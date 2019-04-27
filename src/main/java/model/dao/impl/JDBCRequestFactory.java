@@ -1,6 +1,7 @@
 package model.dao.impl;
 
 import model.dao.RequestDao;
+import model.dao.mapper.AccountMapper;
 import model.dao.mapper.RequestMapper;
 import model.entity.Account;
 import model.entity.Request;
@@ -11,6 +12,7 @@ import java.util.stream.IntStream;
 public class JDBCRequestFactory implements RequestDao {
     private static final String SQL_INSERT = "INSERT INTO request (content,date,comment,accepted) values(?,?,?,?)";
     private static final String SQL_FIND = "SELECT request_idrequest FROM account_has_request WHERE emailaccount = ?";
+    private static final String SQL_FIND_BY_ID_EMAIL = "SELECT emailaccount FROM account_has_request WHERE request_idrequest = ?";
     private static final String SQL_FIND_ALL = "select * from request";
     private static final String SQL_FIND_BY_ID = "select * from request where idrequest = ?";
     private static final String SQL_INSERT_REQ = "INSERT INTO account_has_request (emailaccount,request_idrequest) values(?,?),(?,?)";
@@ -144,9 +146,6 @@ public class JDBCRequestFactory implements RequestDao {
         int result = 0;
         String query = String.format(SQL_GET_SIZE, preparePlaceHolders(states.size()));
         try (PreparedStatement st = connection.prepareCall(query)) {
-            /*for (int i = 1; i <= states.size(); i++) {
-                st.setString(i, states.get(i - 1));
-            }*/
             findInRange(st,states);
             st.setString(states.size() + 1, email);
             ResultSet rs = st.executeQuery();
@@ -204,11 +203,6 @@ public class JDBCRequestFactory implements RequestDao {
         List<Request> result = new ArrayList<>();
         String query = String.format(SQL_FIND_LIMIT_CONFERENCE, preparePlaceHolders(states.size()));
         try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
-
-            /*for (int i = 1; i <= states.size(); i++) {
-                preparedStatement.setString(i, states.get(i-1));
-
-            }*/
             findInRange(preparedStatement,states);
             preparedStatement.setString(states.size() + 1, account.getEmail());
             preparedStatement.setInt(states.size() + 2, limit);
@@ -225,6 +219,7 @@ public class JDBCRequestFactory implements RequestDao {
         }
         return null;
     }
+
 
     private String preparePlaceHolders(int length) {
         return String.join(",", Collections.nCopies(length, "?"));

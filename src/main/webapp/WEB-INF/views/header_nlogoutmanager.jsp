@@ -55,8 +55,19 @@
                                 <li class="divider"></li>
                                 <li><a type="submit" href="${pageContext.request.contextPath}/app/actionManager?lang=en_uk">${requestScope.langBundle.getString("EN")}</a></li>
 
+
                             </ul>
 
+                        </li>
+                        <li class="dropdown">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown">${requestScope.langBundle.getString("MY_OFFICE")}<b class="caret"></b></a>
+                            <ul class="dropdown-menu">
+                                <li><a href=${pageContext.request.contextPath}/app/actionManager>${requestScope.langBundle.getString("REQUESTS")}</a></li>
+                                <li class="divider"></li>
+                                <li> <a class="nav-link" href="${pageContext.request.contextPath}/app/tracking">${requestScope.langBundle.getString("TRACKING")}</a></li>
+                                <li class="divider"></li>
+                                <li> <a class="nav-link" href="${pageContext.request.contextPath}/app/logout">${requestScope.langBundle.getString("LOG_OUT")}</a></li>
+                            </ul>
                         </li>
                     </ul>
                 </div><!--/.nav-collapse -->

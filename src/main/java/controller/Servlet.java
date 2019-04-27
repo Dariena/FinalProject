@@ -1,16 +1,5 @@
 package controller;
-import controller.command.Command;
-import controller.command.ActionManager;
-import controller.command.ActionMaster;
-import controller.command.ActionUser;
-import controller.command.Home;
-import controller.command.Logout;
-import controller.command.Manager;
-import controller.command.Master;
-import controller.command.Registration;
-import controller.command.ReviewAll;
-import controller.command.ReviewUser;
-import controller.command.User;
+import controller.command.*;
 import controller.filters.AuthFilter;
 import model.service.UserService;
 import org.apache.log4j.Logger;
@@ -43,6 +32,7 @@ public class Servlet extends HttpServlet {
         commands.put("actionMaster", new ActionMaster());
         commands.put("reviewUser", new ReviewUser());
         commands.put("reviewAll", new ReviewAll());
+        commands.put("tracking", new TrackingRequest());
         LOGGER.info("Servlet initialization is successfully");
     }
 

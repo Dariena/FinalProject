@@ -86,7 +86,6 @@
 </head>
 
 <body>
-
 <div class="navbar navbar-inverse navbar-fixed-top">
     <div class="navbar-inner">
         <div class="container">
@@ -114,6 +113,8 @@
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown">${requestScope.langBundle.getString("MY_OFFICE")}<b class="caret"></b></a>
                         <ul class="dropdown-menu">
                             <li><a href=${pageContext.request.contextPath}/app/actionManager>${requestScope.langBundle.getString("REQUESTS")}</a></li>
+                            <li class="divider"></li>
+                            <li> <a class="nav-link" href="${pageContext.request.contextPath}/app/tracking">${requestScope.langBundle.getString("TRACKING")}</a></li>
                             <li class="divider"></li>
                             <li> <a class="nav-link" href="${pageContext.request.contextPath}/app/logout">${requestScope.langBundle.getString("LOG_OUT")}</a></li>
                         </ul>

@@ -117,6 +117,26 @@ public class JDBCAccountFactory implements AccountDao {
         return result;
     }
 
+    @Override
+    public List<String> findByIdEmail(int id) {
+        List<String> email = new ArrayList<>();
+        try (PreparedStatement st = connection.prepareCall(SQL_FIND_BY_ID_EMAIL)) {
+            st.setString(1, Role.MASTER.name());
+           /* st.setString(2, Role.USER.name());*/
+            st.setInt(2, id);
+            ResultSet rs = st.executeQuery();
+            while (rs.next()) {
+                email.add(rs.getString(1));
+            }
+
+            return email;
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
 
     @Override
     public void close() {
